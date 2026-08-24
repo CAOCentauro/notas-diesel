@@ -468,7 +468,16 @@
             <!-- Agrega más nombres aquí ↑ -->
           </select>
         </div>
-
+<!-- ② UNIDAD (CAMIÓN) ───────────────────────────────── -->
+<div class="campo">
+  <div class="campo__label">🚛 Unidad</div>
+  <select id="selectUnidad">
+    <option value="">— Selecciona el camión —</option>
+    <option value="ABC123 — Camion 1">ABC123 — Camion 1</option>
+    <option value="DEF456 — Camion 2">DEF456 — Camion 2</option>
+    <option value="GHI789 — Camion 3">GHI789 — Camion 3</option>
+  </select>
+</div>
         <!-- ② DESCRIPCIÓN (OPCIONAL) ──────────────────────────── -->
         <div class="campo">
           <div class="campo__label">
@@ -600,6 +609,7 @@
 
     // ── Controles del formulario
     const selectChofer     = document.getElementById('selectChofer');
+    const selectUnidad = document.getElementById('selectUnidad');
     const descripcion      = document.getElementById('descripcion');
     const inputFoto        = document.getElementById('inputFoto');
     const zonaCaptura      = document.getElementById('zonaCaptura');
@@ -763,7 +773,11 @@
         selectChofer.focus();
         return;   // Salimos sin enviar
       }
-
+if (!selectUnidad.value) {
+  alert('⚠️ Por favor selecciona la unidad (camión).');
+  selectUnidad.focus();
+  return;
+}
       if (!fotoBase64) {
         alert('⚠️ Por favor toma una foto de la nota.');
         return;
@@ -771,8 +785,9 @@
 
       // ── Armamos el objeto con los datos a enviar ──────────────
       const datos = {
-        chofer:      selectChofer.value,
-        descripcion: descripcion.value.trim(),   // .trim() elimina espacios al inicio/fin
+  chofer: selectChofer.value,
+  unidad: selectUnidad.value,
+  descripcion: descripcion.value.trim(),
         foto:        fotoBase64
         // La fecha y hora se generan en el backend (es más confiable)
       };
@@ -834,8 +849,9 @@
     // ║  Limpia todos los campos y regresa al formulario inicial ║
     // ╚══════════════════════════════════════════════════════════╝
     function reiniciarFormulario() {
-      selectChofer.value             = '';
-      descripcion.value              = '';
+      selectChofer.value = '';
+selectUnidad.value = '';
+descripcion.value = '';
       fotoBase64                     = null;
       previewImg.src                 = '';
       inputFoto.value                = '';
