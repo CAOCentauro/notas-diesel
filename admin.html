@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛽</text></svg>" />
+  <title>Admin — Diesel</title>
+
+  <style>
+    /* ── Tokens (mismos que index.html) ── */
+    :root {
+      --navy:        #000000;
+      --amber:       #F59E0B;
+      --amber-dark:  #D97706;
+      --amber-pale:  #FEF3C7;
+      --fondo:       #F1F5F9;
+      --blanco:      #FFFFFF;
+      --texto:       #0F172A;
+      --texto-suave: #64748B;
+      --borde:       #E2E8F0;
+      --verde:       #16A34A;
+      --rojo:        #DC2626;
+      --radio-md:    14px;
+      --radio-lg:    20px;
+      --sombra:      0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      min-height: 100%;
+    }
+
+    /* ── Header ── */
+    .app-header {
+      background: var(--navy);
+      padding: 18px 20px 14px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .app-header__logo  { font-size: 1.6rem; display: block; margin-bottom: 3px; }
+    .app-header__titulo { font-size: 0.9rem; font-weight: 800; color: var(--blanco); letter-spacing: 0.06em; text-transform: uppercase; }
+    .admin-badge {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--navy);
+      font-size: 0.6rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 9px;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+
+    /* ── Layout ── */
+    main { padding: 20px 16px 48px; max-width: 1020px; margin: 0 auto; }
+
+    /* ── Drop zone ── */
+    .drop-zone {
+      border: 2.5px dashed var(--amber);
+      border-radius: var(--radio-lg);
+      background: var(--amber-pale);
+      padding: 56px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s;
+      user-select: none;
+      position: relative;
+    }
+    .drop-zone.over { background: #FDE68A; }
+    .drop-zone__icono  { font-size: 3rem; display: block; margin-bottom: 12px; }
+    .drop-zone__titulo { font-size: 1.1rem; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+    .drop-zone__hint   { font-size: 0.85rem; color: var(--texto-suave); }
+    #inputFotos {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── Progreso ── */
+    .seccion-progreso {
+      background: var(--blanco);
+      border-radius: var(--radio-lg);
+      padding: 44px 24px;
+      text-align: center;
+      box-shadow: var(--sombra);
+    }
+    .progreso__spinner {
+      width: 48px; height: 48px;
+      border: 4px solid var(--borde);
+      border-top-color: var(--amber);
+      border-radius: 50%;
+      animation: girar 0.75s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes girar { to { transform: rotate(360deg); } }
+    .progreso__texto { font-size: 0.95rem; color: var(--texto-suave); margin-bottom: 16px; }
+    .barra-bg {
+      background: var(--borde);
+      border-radius: 99px;
+      height: 8px;
+      overflow: hidden;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+    .barra-fill {
+      height: 100%;
+      background: var(--amber);
+      border-radius: 99px;
+      transition: width 0.3s;
+    }
+
+    /* ── Barra de acciones masivas ── */
+    .bulk-bar {
+      background: var(--blanco);
+      border-radius: var(--radio-md);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      box-shadow: var(--sombra);
+      margin-bottom: 10px;
+    }
+    .bulk-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--texto-suave);
+      white-space: nowrap;
+    }
+    .bulk-sel {
+      padding: 7px 30px 7px 10px;
+      border: 1.5px solid var(--borde);
+      border-radius: var(--radio-md);
+      font-size: 0.82rem;
+      font-family: inherit;
+      color: var(--texto);
+      background: var(--fondo);
+      -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      cursor: pointer;
+    }
+    .bulk-sel:focus { outline: none; border-color: var(--amber); }
+    .btn-aplicar {
+      padding: 7px 14px;
+      background: var(--navy);
+      color: var(--blanco);
+      border: none;
+      border-radius: var(--radio-md);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .bulk-spacer { flex: 1; }
+    .bulk-contador { font-size: 0.78rem; color: var(--texto-suave); white-space: nowrap; }
+
+    /* ── Tabla ── */
+    .tabla-wrap {
+      background: var(--blanco);
+      border-radius: var(--radio-lg);
+      box-shadow: var(--sombra);
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .tabla-scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; min-width: 900px; }
+    thead tr { background: var(--navy); }
+    thead th {
+      color: rgba(255,255,255,0.65);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      padding: 10px 8px;
+      text-align: left;
+      white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid var(--borde); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr.fila-ok    { background: #F0FDF4; }
+    tbody tr.fila-error { background: #FFF5F5; }
+    tbody td { padding: 7px 8px; vertical-align: middle; }
+
+    /* Thumbnail */
+    .thumb {
+      width: 44px; height: 44px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1.5px solid var(--borde);
+      display: block;
+    }
+
+    /* Inputs inline */
+    .td-inp, .td-sel {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1.5px solid var(--borde);
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-family: inherit;
+      color: var(--texto);
+      background: var(--fondo);
+      transition: border-color 0.15s;
+    }
+    .td-sel {
+      -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 6px center;
+      padding-right: 22px;
+      cursor: pointer;
+    }
+    .td-inp:focus, .td-sel:focus { outline: none; border-color: var(--amber); background: var(--blanco); }
+    .td-inp:disabled, .td-sel:disabled { opacity: 0.5; cursor: not-allowed; }
+    .td-num   { text-align: right; width: 76px; }
+    .td-fecha { width: 104px; }
+    .td-chofer { min-width: 128px; }
+    .td-unidad { min-width: 138px; }
+
+    /* Badge confianza */
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 99px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .badge-alta  { background: #DCFCE7; color: #15803D; }
+    .badge-media { background: #FEF9C3; color: #A16207; }
+    .badge-baja  { background: #FEE2E2; color: #B91C1C; }
+    .badge-sin   { background: var(--borde); color: var(--texto-suave); }
+
+    /* Botón eliminar fila */
+    .btn-del {
+      background: none; border: none;
+      color: var(--texto-suave);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: background 0.1s, color 0.1s;
+    }
+    .btn-del:hover { background: #FEE2E2; color: var(--rojo); }
+
+    /* Agregar más fotos */
+    .btn-agregar {
+      width: 100%;
+      padding: 12px;
+      border: 2px dashed var(--borde);
+      border-radius: var(--radio-md);
+      background: transparent;
+      color: var(--texto-suave);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .btn-agregar:hover { border-color: var(--amber); color: var(--navy); }
+    #inputAgregar {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer;
+      width: 100%; height: 100%;
+    }
+
+    /* Botón enviar */
+    .btn-enviar-todo {
+      width: 100%;
+      padding: 18px;
+      background: var(--amber);
+      color: var(--navy);
+      border: none;
+      border-radius: var(--radio-md);
+      font-size: 1rem;
+      font-weight: 800;
+      font-family: inherit;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-enviar-todo:active:not(:disabled) { background: var(--amber-dark); transform: scale(0.98); }
+    .btn-enviar-todo:disabled { background: var(--borde); color: var(--texto-suave); cursor: not-allowed; }
+
+    /* Overlay enviando */
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 50;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .overlay.activo { display: flex; }
+    .overlay-card {
+      background: var(--blanco);
+      border-radius: var(--radio-lg);
+      padding: 32px 28px;
+      text-align: center;
+      max-width: 340px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .overlay-card__icono  { font-size: 2.5rem; margin-bottom: 12px; }
+    .overlay-card__titulo { font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; }
+    .overlay-card__sub    { font-size: 0.85rem; color: var(--texto-suave); margin-bottom: 20px; }
+
+    /* Resumen */
+    .resumen {
+      background: var(--blanco);
+      border-radius: var(--radio-lg);
+      padding: 36px 24px;
+      text-align: center;
+      box-shadow: var(--sombra);
+    }
+    .resumen__icono  { font-size: 4rem; margin-bottom: 12px; }
+    .resumen__titulo { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
+    .resumen__texto  { font-size: 0.9rem; color: var(--texto-suave); line-height: 1.65; }
+    .resumen__stats  { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+    .resumen__stat   { background: var(--fondo); border-radius: var(--radio-md); padding: 16px; }
+    .resumen__stat-v { font-size: 2rem; font-weight: 800; }
+    .resumen__stat-l { font-size: 0.75rem; color: var(--texto-suave); margin-top: 2px; }
+    .btn-sec {
+      margin-top: 12px;
+      padding: 14px 28px;
+      border: 2.5px solid var(--navy);
+      background: transparent;
+      color: var(--navy);
+      border-radius: var(--radio-md);
+      font-size: 0.9rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .btn-sec + .btn-sec { margin-left: 8px; }
+
+    /* Modal foto */
+    .modal-foto {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-foto.activo { display: flex; }
+    .modal-foto img { max-width: 100%; max-height: 90vh; border-radius: var(--radio-md); object-fit: contain; }
+    .modal-cerrar {
+      position: absolute; top: 16px; right: 16px;
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.15);
+      border: none; border-radius: 50%;
+      color: white; font-size: 1.2rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .oculto { display: none !important; }
+  </style>
+</head>
+
+<body>
+
+  <header class="app-header">
+    <span class="app-header__logo">⛽</span>
+    <div class="app-header__titulo">Notas de Diesel</div>
+    <div class="admin-badge">Panel Administrativo</div>
+  </header>
+
+  <main>
+
+    <!-- ① Drop zone -->
+    <div id="seccionDrop">
+      <div class="drop-zone" id="dropZone">
+        <span class="drop-zone__icono">📂</span>
+        <div class="drop-zone__titulo">Selecciona las fotos de los tickets</div>
+        <div class="drop-zone__hint">Arrastra aquí o toca para abrir la galería · puedes seleccionar varias a la vez</div>
+        <input type="file" id="inputFotos" accept="image/*" multiple />
+      </div>
+    </div>
+
+    <!-- ② Procesando -->
+    <div id="seccionProgreso" class="oculto">
+      <div class="seccion-progreso">
+        <div class="progreso__spinner"></div>
+        <div class="progreso__texto" id="textoProgreso">Leyendo foto 1 de 5…</div>
+        <div class="barra-bg">
+          <div class="barra-fill" id="barraProgreso" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ Tabla editable -->
+    <div id="seccionTabla" class="oculto">
+
+      <!-- Acciones masivas -->
+      <div class="bulk-bar">
+        <span class="bulk-label">Aplicar a todos:</span>
+        <select class="bulk-sel" id="bulkChofer">
+          <option value="">— Chofer —</option>
+          <option value="Juan Sandoval">Juan Sandoval</option>
+          <option value="Ruben Pacheco">Ruben Pacheco</option>
+          <option value="Noe Granados">Noe Granados</option>
+          <option value="Jose Abel">Jose Abel</option>
+          <option value="Eduardo Duana">Eduardo Duana</option>
+          <option value="Juan Alvaro (el pollito)">Juan Alvaro (el pollito)</option>
+        </select>
+        <select class="bulk-sel" id="bulkUnidad">
+          <option value="">— Unidad —</option>
+          <option value="ABC123 — Camion 1">ABC123 — Camion 1</option>
+          <option value="DEF456 — Camion 2">DEF456 — Camion 2</option>
+          <option value="GHI789 — Camion 3">GHI789 — Camion 3</option>
+        </select>
+        <button class="btn-aplicar" id="btnAplicar">Aplicar</button>
+        <span class="bulk-spacer"></span>
+        <span class="bulk-contador" id="contador"></span>
+      </div>
+
+      <!-- Tabla -->
+      <div class="tabla-wrap">
+        <div class="tabla-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Foto</th>
+                <th>#</th>
+                <th>Chofer</th>
+                <th>Unidad</th>
+                <th>Fecha ticket</th>
+                <th>Litros</th>
+                <th>Monto ($)</th>
+                <th>$/L</th>
+                <th>Gasolinera</th>
+                <th>Descripción</th>
+                <th>Confianza</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tablaBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Agregar más -->
+      <button class="btn-agregar">
+        ➕ Agregar más fotos
+        <input type="file" id="inputAgregar" accept="image/*" multiple />
+      </button>
+
+      <!-- Enviar -->
+      <button class="btn-enviar-todo" id="btnEnviarTodo">
+        Registrar todos los tickets →
+      </button>
+
+    </div>
+
+    <!-- ④ Resumen final -->
+    <div id="seccionResumen" class="oculto">
+      <div class="resumen">
+        <div class="resumen__icono" id="resumenIcono">✅</div>
+        <h2 class="resumen__titulo" id="resumenTitulo">¡Todo registrado!</h2>
+        <p class="resumen__texto" id="resumenTexto"></p>
+        <div class="resumen__stats">
+          <div class="resumen__stat">
+            <div class="resumen__stat-v" id="resumenOk" style="color:var(--verde)">0</div>
+            <div class="resumen__stat-l">Registrados</div>
+          </div>
+          <div class="resumen__stat">
+            <div class="resumen__stat-v" id="resumenErr" style="color:var(--rojo)">0</div>
+            <div class="resumen__stat-l">Con error</div>
+          </div>
+        </div>
+        <button class="btn-sec" id="btnVerTabla" style="display:none">Ver errores</button>
+        <button class="btn-sec" id="btnNuevoLote">Nueva carga</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Overlay enviando -->
+  <div class="overlay" id="overlayEnviando">
+    <div class="overlay-card">
+      <div class="overlay-card__icono">📤</div>
+      <div class="overlay-card__titulo">Enviando registros</div>
+      <div class="overlay-card__sub" id="textoEnviando">Enviando 1 de 5…</div>
+      <div class="barra-bg">
+        <div class="barra-fill" id="barraEnviando" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal foto -->
+  <div class="modal-foto" id="modalFoto">
+    <button class="modal-cerrar" id="btnCerrarModal">✕</button>
+    <img id="modalImg" alt="Foto del ticket" />
+  </div>
+
+  <script>
+
+    // ── Configuración ───────────────────────────────────────────
+    const BACKEND_URL   = 'https://script.google.com/macros/s/AKfycbzjMRXk9isshJ05TyGShojZHpXAiub8aotRQItlfhNM5oEvu7hb5125C08Hva307UCOhQ/exec';
+    const IMG_ANCHO_MAX = 1280;
+    const IMG_CALIDAD   = 0.78;
+
+    // Listas compartidas (mantener igual que index.html)
+    const CHOFERES = ['Juan Sandoval','Ruben Pacheco','Noe Granados','Jose Abel','Eduardo Duana','Juan Alvaro (el pollito)'];
+    const UNIDADES = ['ABC123 — Camion 1','DEF456 — Camion 2','GHI789 — Camion 3'];
+
+    // ── Estado ──────────────────────────────────────────────────
+    let tickets   = [];
+    let idCounter = 0;
+
+    // ── Referencias DOM ─────────────────────────────────────────
+    const seccionDrop     = document.getElementById('seccionDrop');
+    const seccionProgreso = document.getElementById('seccionProgreso');
+    const seccionTabla    = document.getElementById('seccionTabla');
+    const seccionResumen  = document.getElementById('seccionResumen');
+    const dropZone        = document.getElementById('dropZone');
+    const inputFotos      = document.getElementById('inputFotos');
+    const inputAgregar    = document.getElementById('inputAgregar');
+    const textoProgreso   = document.getElementById('textoProgreso');
+    const barraProgreso   = document.getElementById('barraProgreso');
+    const tablaBody       = document.getElementById('tablaBody');
+    const bulkChofer      = document.getElementById('bulkChofer');
+    const bulkUnidad      = document.getElementById('bulkUnidad');
+    const btnAplicar      = document.getElementById('btnAplicar');
+    const contador        = document.getElementById('contador');
+    const btnEnviarTodo   = document.getElementById('btnEnviarTodo');
+    const overlayEnviando = document.getElementById('overlayEnviando');
+    const textoEnviando   = document.getElementById('textoEnviando');
+    const barraEnviando   = document.getElementById('barraEnviando');
+    const modalFoto       = document.getElementById('modalFoto');
+    const modalImg        = document.getElementById('modalImg');
+    const btnCerrarModal  = document.getElementById('btnCerrarModal');
+    const btnNuevoLote    = document.getElementById('btnNuevoLote');
+    const btnVerTabla     = document.getElementById('btnVerTabla');
+
+    // ── Mostrar sección ─────────────────────────────────────────
+    function mostrar(cual) {
+      [seccionDrop, seccionProgreso, seccionTabla, seccionResumen].forEach(s => s.classList.add('oculto'));
+      cual.classList.remove('oculto');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── Comprimir imagen (idéntico a index.html) ─────────────────
+    function procesarImagen(file) {
+      return new Promise((resolve, reject) => {
+        const lector = new FileReader();
+        lector.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            let w = img.width, h = img.height;
+            if (w > IMG_ANCHO_MAX) { h = Math.round(h * IMG_ANCHO_MAX / w); w = IMG_ANCHO_MAX; }
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', IMG_CALIDAD));
+          };
+          img.onerror = () => reject(new Error('No se pudo leer la imagen'));
+          img.src = e.target.result;
+        };
+        lector.onerror = () => reject(new Error('Error al leer el archivo'));
+        lector.readAsDataURL(file);
+      });
+    }
+
+    // ── Extraer datos via Apps Script (accion: extraer) ──────────
+    async function extraerDatos(fotoBase64) {
+      try {
+        const resp = await fetch(BACKEND_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+          body: JSON.stringify({ accion: 'extraer', foto: fotoBase64 })
+        });
+        const result = await resp.json();
+        return (result.exito && result.datos) ? result.datos : {};
+      } catch { return {}; }
+    }
+
+    // ── Procesar lote de archivos ─────────────────────────────────
+    async function procesarArchivos(files) {
+      const imgs = Array.from(files).filter(f => f.type.startsWith('image/'));
+      if (!imgs.length) return;
+
+      mostrar(seccionProgreso);
+
+      for (let i = 0; i < imgs.length; i++) {
+        textoProgreso.textContent = `Leyendo foto ${i + 1} de ${imgs.length}…`;
+        barraProgreso.style.width = Math.round(i / imgs.length * 100) + '%';
+
+        try {
+          const foto  = await procesarImagen(imgs[i]);
+          const datos = await extraerDatos(foto);
+          tickets.push({
+            id:     ++idCounter,
+            nombre: imgs[i].name,
+            foto,
+            datos: {
+              chofer:       '',
+              unidad:       '',
+              fecha_ticket: datos.fecha_ticket    || '',
+              litros:       datos.litros          != null ? String(datos.litros)       : '',
+              monto:        datos.monto_total     != null ? String(datos.monto_total)  : '',
+              precio_litro: datos.precio_litro    != null ? String(datos.precio_litro) : '',
+              gasolinera:   datos.gasolinera      || '',
+              descripcion:  '',
+              confianza:    datos.confianza       != null ? datos.confianza : null
+            },
+            estado: 'pendiente'
+          });
+        } catch {
+          tickets.push({
+            id: ++idCounter, nombre: imgs[i].name, foto: null,
+            datos: { chofer:'', unidad:'', fecha_ticket:'', litros:'', monto:'', precio_litro:'', gasolinera:'', descripcion:'', confianza: null },
+            estado: 'pendiente'
+          });
+        }
+      }
+
+      barraProgreso.style.width = '100%';
+      renderTabla();
+      mostrar(seccionTabla);
+    }
+
+    // ── Renderizar tabla ─────────────────────────────────────────
+    function renderTabla() {
+      const pendientes = tickets.filter(t => t.estado === 'pendiente').length;
+      contador.textContent = `${tickets.length} foto${tickets.length !== 1 ? 's' : ''} · ${pendientes} por enviar`;
+      btnEnviarTodo.disabled = pendientes === 0;
+
+      const optsChofer = CHOFERES.map(c => `<option value="${c}">${c}</option>`).join('');
+      const optsUnidad = UNIDADES.map(u => `<option value="${u}">${u}</option>`).join('');
+
+      tablaBody.innerHTML = tickets.map((t, idx) => {
+        const d = t.datos;
+        const dis = t.estado !== 'pendiente' ? 'disabled' : '';
+        const filaClass = t.estado === 'ok' ? 'fila-ok' : t.estado === 'error' ? 'fila-error' : '';
+        const estadoIcon = t.estado === 'ok' ? '✅' : t.estado === 'error' ? '❌' : '';
+
+        let badgeClass = 'badge-sin', badgeTxt = '—';
+        if (d.confianza != null) {
+          badgeTxt = d.confianza + '%';
+          badgeClass = d.confianza >= 80 ? 'badge-alta' : d.confianza >= 50 ? 'badge-media' : 'badge-baja';
+        }
+
+        return `<tr class="${filaClass}" data-id="${t.id}">
+          <td>${t.foto ? `<img class="thumb" src="${t.foto}" alt="ticket" data-thumb="${t.id}"/>` : '🚫'}</td>
+          <td style="color:var(--texto-suave);font-weight:600">${estadoIcon || (idx + 1)}</td>
+          <td>
+            <select class="td-sel td-chofer" data-id="${t.id}" data-field="chofer" ${dis}>
+              <option value="">— Chofer —</option>${optsChofer}
+            </select>
+          </td>
+          <td>
+            <select class="td-sel td-unidad" data-id="${t.id}" data-field="unidad" ${dis}>
+              <option value="">— Unidad —</option>${optsUnidad}
+            </select>
+          </td>
+          <td><input class="td-inp td-fecha" type="text" value="${d.fecha_ticket}" data-id="${t.id}" data-field="fecha_ticket" placeholder="YYYY-MM-DD" ${dis}/></td>
+          <td><input class="td-inp td-num" type="number" value="${d.litros}" data-id="${t.id}" data-field="litros" placeholder="0.0" step="0.001" ${dis}/></td>
+          <td><input class="td-inp td-num" type="number" value="${d.monto}" data-id="${t.id}" data-field="monto" placeholder="0.00" step="0.01" ${dis}/></td>
+          <td><input class="td-inp td-num" type="number" value="${d.precio_litro}" data-id="${t.id}" data-field="precio_litro" placeholder="0.00" step="0.001" ${dis}/></td>
+          <td><input class="td-inp" style="min-width:110px" type="text" value="${d.gasolinera}" data-id="${t.id}" data-field="gasolinera" placeholder="Gasolinera" ${dis}/></td>
+          <td><input class="td-inp" style="min-width:110px" type="text" value="${d.descripcion}" data-id="${t.id}" data-field="descripcion" placeholder="Opcional" ${dis}/></td>
+          <td><span class="badge ${badgeClass}">${badgeTxt}</span></td>
+          <td>${t.estado === 'pendiente' ? `<button class="btn-del" data-del="${t.id}">✕</button>` : ''}</td>
+        </tr>`;
+      }).join('');
+
+      // Restaurar valores seleccionados en los selects
+      tickets.forEach(t => {
+        const row = tablaBody.querySelector(`tr[data-id="${t.id}"]`);
+        if (!row) return;
+        const selChofer = row.querySelector('[data-field="chofer"]');
+        const selUnidad = row.querySelector('[data-field="unidad"]');
+        if (selChofer) selChofer.value = t.datos.chofer;
+        if (selUnidad) selUnidad.value = t.datos.unidad;
+      });
+
+      // Eventos de edición
+      tablaBody.querySelectorAll('[data-field]').forEach(el => {
+        const ev = el.tagName === 'SELECT' ? 'change' : 'input';
+        el.addEventListener(ev, e => {
+          const t = tickets.find(t => t.id == e.target.dataset.id);
+          if (t) t.datos[e.target.dataset.field] = e.target.value;
+        });
+      });
+
+      // Eliminar fila
+      tablaBody.querySelectorAll('[data-del]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const id = parseInt(e.target.dataset.del);
+          tickets = tickets.filter(t => t.id !== id);
+          tickets.length === 0 ? mostrar(seccionDrop) : renderTabla();
+        });
+      });
+
+      // Ampliar foto
+      tablaBody.querySelectorAll('[data-thumb]').forEach(img => {
+        img.addEventListener('click', e => {
+          const t = tickets.find(t => t.id == e.target.dataset.thumb);
+          if (t && t.foto) { modalImg.src = t.foto; modalFoto.classList.add('activo'); }
+        });
+      });
+    }
+
+    // ── Aplicar a todos ──────────────────────────────────────────
+    btnAplicar.addEventListener('click', () => {
+      const chofer = bulkChofer.value;
+      const unidad = bulkUnidad.value;
+      if (!chofer && !unidad) { alert('Selecciona al menos un campo para aplicar.'); return; }
+      tickets.forEach(t => {
+        if (t.estado !== 'pendiente') return;
+        if (chofer) t.datos.chofer = chofer;
+        if (unidad) t.datos.unidad = unidad;
+      });
+      renderTabla();
+    });
+
+    // ── Sincronizar inputs al DOM antes de enviar ────────────────
+    function sincronizarDesdeDom() {
+      tablaBody.querySelectorAll('[data-field]').forEach(el => {
+        const t = tickets.find(t => t.id == el.dataset.id);
+        if (t) t.datos[el.dataset.field] = el.value;
+      });
+    }
+
+    // ── Enviar todos ─────────────────────────────────────────────
+    btnEnviarTodo.addEventListener('click', async () => {
+      sincronizarDesdeDom();
+
+      const pendientes = tickets.filter(t => t.estado === 'pendiente');
+      const sinChofer  = pendientes.filter(t => !t.datos.chofer);
+      const sinUnidad  = pendientes.filter(t => !t.datos.unidad);
+
+      if (sinChofer.length || sinUnidad.length) {
+        const msg = [];
+        if (sinChofer.length) msg.push(`• ${sinChofer.length} fila(s) sin chofer`);
+        if (sinUnidad.length) msg.push(`• ${sinUnidad.length} fila(s) sin unidad`);
+        alert('⚠️ Faltan datos:\n' + msg.join('\n'));
+        return;
+      }
+
+      overlayEnviando.classList.add('activo');
+      let enviados = 0, errores = 0;
+
+      for (let i = 0; i < pendientes.length; i++) {
+        const t   = pendientes[i];
+        const pct = Math.round(i / pendientes.length * 100);
+        textoEnviando.textContent = `Enviando ${i + 1} de ${pendientes.length}…`;
+        barraEnviando.style.width = pct + '%';
+
+        try {
+          const resp = await fetch(BACKEND_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+            body: JSON.stringify({
+              chofer:      t.datos.chofer,
+              unidad:      t.datos.unidad,
+              descripcion: t.datos.descripcion,
+              foto:        t.foto,
+              // Enviamos los datos ya revisados — el Apps Script NO re-extrae con IA
+              datos_extraidos: {
+                litros:       t.datos.litros       !== '' ? parseFloat(t.datos.litros)       : null,
+                monto_total:  t.datos.monto        !== '' ? parseFloat(t.datos.monto)        : null,
+                precio_litro: t.datos.precio_litro !== '' ? parseFloat(t.datos.precio_litro) : null,
+                gasolinera:   t.datos.gasolinera   || null,
+                fecha_ticket: t.datos.fecha_ticket || null,
+                confianza:    t.datos.confianza
+              }
+            })
+          });
+          const result = await resp.json();
+          t.estado = result.exito ? 'ok' : 'error';
+          result.exito ? enviados++ : errores++;
+        } catch {
+          t.estado = 'error';
+          errores++;
+        }
+      }
+
+      barraEnviando.style.width = '100%';
+      await new Promise(r => setTimeout(r, 400));
+      overlayEnviando.classList.remove('activo');
+
+      // Resumen
+      document.getElementById('resumenOk').textContent   = enviados;
+      document.getElementById('resumenErr').textContent  = errores;
+      document.getElementById('resumenIcono').textContent = errores === 0 ? '✅' : enviados === 0 ? '❌' : '⚠️';
+      document.getElementById('resumenTitulo').textContent = errores === 0 ? '¡Todo registrado!' : enviados === 0 ? 'Error al enviar' : 'Enviado con errores';
+      document.getElementById('resumenTexto').textContent  = `${enviados} ticket${enviados !== 1 ? 's' : ''} guardado${enviados !== 1 ? 's' : ''} en Drive y Sheets.` + (errores ? ` ${errores} con error.` : '');
+      btnVerTabla.style.display = errores > 0 ? 'inline-block' : 'none';
+      mostrar(seccionResumen);
+    });
+
+    // ── Agregar más fotos ────────────────────────────────────────
+    inputAgregar.addEventListener('change', async e => {
+      if (e.target.files.length) { await procesarArchivos(e.target.files); e.target.value = ''; }
+    });
+
+    // ── Drop zone ────────────────────────────────────────────────
+    inputFotos.addEventListener('change', async e => {
+      if (e.target.files.length) await procesarArchivos(e.target.files);
+    });
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('over'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('over'));
+    dropZone.addEventListener('drop', async e => {
+      e.preventDefault(); dropZone.classList.remove('over');
+      if (e.dataTransfer.files.length) await procesarArchivos(e.dataTransfer.files);
+    });
+
+    // ── Modal ────────────────────────────────────────────────────
+    btnCerrarModal.addEventListener('click', () => modalFoto.classList.remove('activo'));
+    modalFoto.addEventListener('click', e => { if (e.target === modalFoto) modalFoto.classList.remove('activo'); });
+
+    // ── Resumen → botones ────────────────────────────────────────
+    btnVerTabla.addEventListener('click', () => { renderTabla(); mostrar(seccionTabla); });
+    btnNuevoLote.addEventListener('click', () => {
+      tickets = []; inputFotos.value = '';
+      bulkChofer.value = ''; bulkUnidad.value = '';
+      mostrar(seccionDrop);
+    });
+
+  </script>
+</body>
+</html>
