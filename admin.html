@@ -672,19 +672,19 @@
           <td>${t.foto ? `<img class="thumb" src="${t.foto}" alt="ticket" data-thumb="${t.id}"/>` : '🚫'}</td>
           <td style="color:var(--texto-suave);font-weight:600">${estadoIcon || (idx + 1)}</td>
           <td>
-            <select class="td-sel td-chofer" data-id="${t.id}" data-field="chofer" ${dis}>
+            <select class="td-sel td-chofer" data-id="${t.id}" data-field="chofer" ${dis} style="${!d.chofer && t.estado==='pendiente' ? 'border-color:var(--rojo)' : ''}">
               <option value="">— Chofer —</option>${optsChofer}
             </select>
           </td>
           <td>
-            <select class="td-sel td-unidad" data-id="${t.id}" data-field="unidad" ${dis}>
+            <select class="td-sel td-unidad" data-id="${t.id}" data-field="unidad" ${dis} style="${!d.unidad && t.estado==='pendiente' ? 'border-color:var(--rojo)' : ''}">
               <option value="">— Unidad —</option>${optsUnidad}
             </select>
           </td>
-          <td><input class="td-inp td-fecha" type="text" value="${d.fecha_ticket}" data-id="${t.id}" data-field="fecha_ticket" placeholder="YYYY-MM-DD" ${dis}/></td>
-          <td><input class="td-inp td-num" type="number" value="${d.litros}" data-id="${t.id}" data-field="litros" placeholder="0.0" step="0.001" ${dis}/></td>
-          <td><input class="td-inp td-num" type="number" value="${d.monto}" data-id="${t.id}" data-field="monto" placeholder="0.00" step="0.01" ${dis}/></td>
-          <td><input class="td-inp td-num" type="number" value="${d.precio_litro}" data-id="${t.id}" data-field="precio_litro" placeholder="0.00" step="0.001" ${dis}/></td>
+          <td><input class="td-inp td-fecha" type="date" value="${d.fecha_ticket}" data-id="${t.id}" data-field="fecha_ticket" ${dis}/></td>
+          <td><input class="td-inp td-num" type="number" value="${d.litros}" data-id="${t.id}" data-field="litros" placeholder="0.0" step="0.001" min="0" ${dis}/></td>
+          <td><input class="td-inp td-num" type="number" value="${d.monto}" data-id="${t.id}" data-field="monto" placeholder="0.00" step="0.01" min="0" ${dis}/></td>
+          <td><input class="td-inp td-num" type="number" value="${d.precio_litro}" data-id="${t.id}" data-field="precio_litro" placeholder="0.00" step="0.001" min="0" ${dis}/></td>
           <td><input class="td-inp" style="min-width:110px" type="text" value="${d.gasolinera}" data-id="${t.id}" data-field="gasolinera" placeholder="Gasolinera" ${dis}/></td>
           <td><input class="td-inp" style="min-width:110px" type="text" value="${d.descripcion}" data-id="${t.id}" data-field="descripcion" placeholder="Opcional" ${dis}/></td>
           <td><span class="badge ${badgeClass}">${badgeTxt}</span></td>
@@ -762,7 +762,19 @@
         const msg = [];
         if (sinChofer.length) msg.push(`• ${sinChofer.length} fila(s) sin chofer`);
         if (sinUnidad.length) msg.push(`• ${sinUnidad.length} fila(s) sin unidad`);
-        alert('⚠️ Faltan datos:\n' + msg.join('\n'));
+        alert('⚠️ Faltan datos:\n' + msg.join('\n') + '\n\nLas celdas en rojo indican qué falta.');
+        renderTabla(); // Re-render to show red borders on empty required fields
+        return;
+      }
+
+      // Validate no negative numbers
+      const conNegativo = pendientes.filter(t =>
+        (t.datos.litros !== '' && parseFloat(t.datos.litros) < 0) ||
+        (t.datos.monto  !== '' && parseFloat(t.datos.monto)  < 0) ||
+        (t.datos.precio_litro !== '' && parseFloat(t.datos.precio_litro) < 0)
+      );
+      if (conNegativo.length) {
+        alert(`⚠️ ${conNegativo.length} fila(s) tienen valores negativos. Corrígelos antes de enviar.`);
         return;
       }
 
