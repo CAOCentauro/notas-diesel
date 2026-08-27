@@ -8,7 +8,6 @@
   <title>Admin — Diesel</title>
 
   <style>
-    /* ── Tokens (mismos que index.html) ── */
     :root {
       --navy:        #000000;
       --amber:       #F59E0B;
@@ -35,7 +34,6 @@
       min-height: 100%;
     }
 
-    /* ── Header ── */
     .app-header {
       background: var(--navy);
       padding: 18px 20px 14px;
@@ -59,10 +57,8 @@
       margin-top: 5px;
     }
 
-    /* ── Layout ── */
     main { padding: 20px 16px 48px; max-width: 1020px; margin: 0 auto; }
 
-    /* ── Drop zone ── */
     .drop-zone {
       border: 2.5px dashed var(--amber);
       border-radius: var(--radio-lg);
@@ -87,7 +83,6 @@
       height: 100%;
     }
 
-    /* ── Progreso ── */
     .seccion-progreso {
       background: var(--blanco);
       border-radius: var(--radio-lg);
@@ -120,7 +115,6 @@
       transition: width 0.3s;
     }
 
-    /* ── Barra de acciones masivas ── */
     .bulk-bar {
       background: var(--blanco);
       border-radius: var(--radio-md);
@@ -170,7 +164,6 @@
     .bulk-spacer { flex: 1; }
     .bulk-contador { font-size: 0.78rem; color: var(--texto-suave); white-space: nowrap; }
 
-    /* ── Tabla ── */
     .tabla-wrap {
       background: var(--blanco);
       border-radius: var(--radio-lg);
@@ -197,7 +190,6 @@
     tbody tr.fila-error { background: #FFF5F5; }
     tbody td { padding: 7px 8px; vertical-align: middle; }
 
-    /* Thumbnail */
     .thumb {
       width: 44px; height: 44px;
       object-fit: cover;
@@ -207,7 +199,6 @@
       display: block;
     }
 
-    /* Inputs inline */
     .td-inp, .td-sel {
       width: 100%;
       padding: 6px 8px;
@@ -230,11 +221,10 @@
     .td-inp:focus, .td-sel:focus { outline: none; border-color: var(--amber); background: var(--blanco); }
     .td-inp:disabled, .td-sel:disabled { opacity: 0.5; cursor: not-allowed; }
     .td-num   { text-align: right; width: 76px; }
-    .td-fecha { width: 104px; }
+    .td-fecha { width: 130px; }
     .td-chofer { min-width: 128px; }
     .td-unidad { min-width: 138px; }
 
-    /* Badge confianza */
     .badge {
       display: inline-block;
       padding: 3px 8px;
@@ -248,7 +238,6 @@
     .badge-baja  { background: #FEE2E2; color: #B91C1C; }
     .badge-sin   { background: var(--borde); color: var(--texto-suave); }
 
-    /* Botón eliminar fila */
     .btn-del {
       background: none; border: none;
       color: var(--texto-suave);
@@ -260,7 +249,6 @@
     }
     .btn-del:hover { background: #FEE2E2; color: var(--rojo); }
 
-    /* Agregar más fotos */
     .btn-agregar {
       width: 100%;
       padding: 12px;
@@ -282,7 +270,6 @@
       width: 100%; height: 100%;
     }
 
-    /* Botón enviar */
     .btn-enviar-todo {
       width: 100%;
       padding: 18px;
@@ -301,7 +288,6 @@
     .btn-enviar-todo:active:not(:disabled) { background: var(--amber-dark); transform: scale(0.98); }
     .btn-enviar-todo:disabled { background: var(--borde); color: var(--texto-suave); cursor: not-allowed; }
 
-    /* Overlay enviando */
     .overlay {
       display: none;
       position: fixed; inset: 0;
@@ -327,7 +313,6 @@
     .overlay-card__titulo { font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; }
     .overlay-card__sub    { font-size: 0.85rem; color: var(--texto-suave); margin-bottom: 20px; }
 
-    /* Resumen */
     .resumen {
       background: var(--blanco);
       border-radius: var(--radio-lg);
@@ -358,7 +343,6 @@
     }
     .btn-sec + .btn-sec { margin-left: 8px; }
 
-    /* Modal foto */
     .modal-foto {
       display: none;
       position: fixed; inset: 0;
@@ -394,7 +378,6 @@
 
   <main>
 
-    <!-- ① Drop zone -->
     <div id="seccionDrop">
       <div class="drop-zone" id="dropZone">
         <span class="drop-zone__icono">📂</span>
@@ -404,7 +387,6 @@
       </div>
     </div>
 
-    <!-- ② Procesando -->
     <div id="seccionProgreso" class="oculto">
       <div class="seccion-progreso">
         <div class="progreso__spinner"></div>
@@ -415,31 +397,30 @@
       </div>
     </div>
 
-    <!-- ③ Tabla editable -->
     <div id="seccionTabla" class="oculto">
 
-      <!-- Acciones masivas -->
       <div class="bulk-bar">
         <span class="bulk-label">Aplicar a todos:</span>
         <select class="bulk-sel" id="bulkChofer">
           <option value="">— Chofer —</option>
-         <option value="Juan Sandoval">Juan Sandoval</option>
+          <option value="Juan Sandoval">Juan Sandoval</option>
+          <option value="Ruben Pacheco">Ruben Pacheco</option>
           <option value="Noe Granados">Noe Granados</option>
-          <option value="Jose Gabriel">Jose Gabriel</option>
+          <option value="Jose Abel">Jose Abel</option>
+          <option value="Eduardo Duana">Eduardo Duana</option>
           <option value="Juan Alvaro (el pollito)">Juan Alvaro (el pollito)</option>
         </select>
         <select class="bulk-sel" id="bulkUnidad">
           <option value="">— Unidad —</option>
-          <option value="KT5793A — VOLVO">KT5793A — VOLVO</option>
-          <option value="LB89559 — KENWORTH NARANJA">LB89559 — KENWORTH NARANJA</option>
-          <option value="VT08F — KENWORTH BLANCO">VT08F — KENWORTH BLANCO</option>
+          <option value="ABC123 — Camion 1">ABC123 — Camion 1</option>
+          <option value="DEF456 — Camion 2">DEF456 — Camion 2</option>
+          <option value="GHI789 — Camion 3">GHI789 — Camion 3</option>
         </select>
         <button class="btn-aplicar" id="btnAplicar">Aplicar</button>
         <span class="bulk-spacer"></span>
         <span class="bulk-contador" id="contador"></span>
       </div>
 
-      <!-- Tabla -->
       <div class="tabla-wrap">
         <div class="tabla-scroll">
           <table>
@@ -464,20 +445,17 @@
         </div>
       </div>
 
-      <!-- Agregar más -->
       <button class="btn-agregar">
         ➕ Agregar más fotos
         <input type="file" id="inputAgregar" accept="image/*" multiple />
       </button>
 
-      <!-- Enviar -->
       <button class="btn-enviar-todo" id="btnEnviarTodo">
         Registrar todos los tickets →
       </button>
 
     </div>
 
-    <!-- ④ Resumen final -->
     <div id="seccionResumen" class="oculto">
       <div class="resumen">
         <div class="resumen__icono" id="resumenIcono">✅</div>
@@ -500,7 +478,6 @@
 
   </main>
 
-  <!-- Overlay enviando -->
   <div class="overlay" id="overlayEnviando">
     <div class="overlay-card">
       <div class="overlay-card__icono">📤</div>
@@ -512,7 +489,6 @@
     </div>
   </div>
 
-  <!-- Modal foto -->
   <div class="modal-foto" id="modalFoto">
     <button class="modal-cerrar" id="btnCerrarModal">✕</button>
     <img id="modalImg" alt="Foto del ticket" />
@@ -520,20 +496,16 @@
 
   <script>
 
-    // ── Configuración ───────────────────────────────────────────
     const BACKEND_URL   = 'https://script.google.com/macros/s/AKfycbzjMRXk9isshJ05TyGShojZHpXAiub8aotRQItlfhNM5oEvu7hb5125C08Hva307UCOhQ/exec';
     const IMG_ANCHO_MAX = 1280;
     const IMG_CALIDAD   = 0.78;
 
-    // Listas compartidas (mantener igual que index.html)
-    const CHOFERES = ['Juan Sandoval','Noe Granados','Jose Gabriel','Juan Alvaro (el pollito)'];
-    const UNIDADES = ['KT5793A — VOLVO','LB89559 — KENWORTH NARANJA','VT08F — KENWORTH BLANCO'];
+    const CHOFERES = ['Juan Sandoval','Ruben Pacheco','Noe Granados','Jose Abel','Eduardo Duana','Juan Alvaro (el pollito)'];
+    const UNIDADES = ['ABC123 — Camion 1','DEF456 — Camion 2','GHI789 — Camion 3'];
 
-    // ── Estado ──────────────────────────────────────────────────
     let tickets   = [];
     let idCounter = 0;
 
-    // ── Referencias DOM ─────────────────────────────────────────
     const seccionDrop     = document.getElementById('seccionDrop');
     const seccionProgreso = document.getElementById('seccionProgreso');
     const seccionTabla    = document.getElementById('seccionTabla');
@@ -558,14 +530,14 @@
     const btnNuevoLote    = document.getElementById('btnNuevoLote');
     const btnVerTabla     = document.getElementById('btnVerTabla');
 
-    // ── Mostrar sección ─────────────────────────────────────────
+    // ── Mostrar sección ──────────────────────────────────────────
     function mostrar(cual) {
       [seccionDrop, seccionProgreso, seccionTabla, seccionResumen].forEach(s => s.classList.add('oculto'));
       cual.classList.remove('oculto');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ── Comprimir imagen (idéntico a index.html) ─────────────────
+    // ── Comprimir imagen ─────────────────────────────────────────
     function procesarImagen(file) {
       return new Promise((resolve, reject) => {
         const lector = new FileReader();
@@ -587,7 +559,7 @@
       });
     }
 
-    // ── Extraer datos via Apps Script (accion: extraer) ──────────
+    // ── Extraer datos via Apps Script ────────────────────────────
     async function extraerDatos(fotoBase64) {
       try {
         const resp = await fetch(BACKEND_URL, {
@@ -646,6 +618,9 @@
     }
 
     // ── Renderizar tabla ─────────────────────────────────────────
+    // NOTA: los event listeners de edición se registran en tablaBody
+    // mediante delegación (ver abajo), NO dentro de esta función.
+    // Esto evita el bug donde re-renderizar la tabla borraba los listeners.
     function renderTabla() {
       const pendientes = tickets.filter(t => t.estado === 'pendiente').length;
       contador.textContent = `${tickets.length} foto${tickets.length !== 1 ? 's' : ''} · ${pendientes} por enviar`;
@@ -666,16 +641,18 @@
           badgeClass = d.confianza >= 80 ? 'badge-alta' : d.confianza >= 50 ? 'badge-media' : 'badge-baja';
         }
 
+        // CAMBIO 1: type="date" en fecha (antes era type="text")
+        // CAMBIO 2: min="0" en los tres campos numéricos
         return `<tr class="${filaClass}" data-id="${t.id}">
           <td>${t.foto ? `<img class="thumb" src="${t.foto}" alt="ticket" data-thumb="${t.id}"/>` : '🚫'}</td>
           <td style="color:var(--texto-suave);font-weight:600">${estadoIcon || (idx + 1)}</td>
           <td>
-            <select class="td-sel td-chofer" data-id="${t.id}" data-field="chofer" ${dis} style="${!d.chofer && t.estado==='pendiente' ? 'border-color:var(--rojo)' : ''}">
+            <select class="td-sel td-chofer" data-id="${t.id}" data-field="chofer" ${dis}>
               <option value="">— Chofer —</option>${optsChofer}
             </select>
           </td>
           <td>
-            <select class="td-sel td-unidad" data-id="${t.id}" data-field="unidad" ${dis} style="${!d.unidad && t.estado==='pendiente' ? 'border-color:var(--rojo)' : ''}">
+            <select class="td-sel td-unidad" data-id="${t.id}" data-field="unidad" ${dis}>
               <option value="">— Unidad —</option>${optsUnidad}
             </select>
           </td>
@@ -700,15 +677,6 @@
         if (selUnidad) selUnidad.value = t.datos.unidad;
       });
 
-      // Eventos de edición
-      tablaBody.querySelectorAll('[data-field]').forEach(el => {
-        const ev = el.tagName === 'SELECT' ? 'change' : 'input';
-        el.addEventListener(ev, e => {
-          const t = tickets.find(t => t.id == e.target.dataset.id);
-          if (t) t.datos[e.target.dataset.field] = e.target.value;
-        });
-      });
-
       // Eliminar fila
       tablaBody.querySelectorAll('[data-del]').forEach(btn => {
         btn.addEventListener('click', e => {
@@ -727,6 +695,21 @@
       });
     }
 
+    // ── CAMBIO 3: Event delegation para edición ──────────────────
+    // Se registra UNA SOLA VEZ en tablaBody, que nunca se reemplaza.
+    // Así captura cambios aunque la tabla se re-renderice (Aplicar, etc.)
+    // Esto corrige el bug donde los datos editados manualmente no llegaban al Sheets.
+    tablaBody.addEventListener('input', function(e) {
+      if (!e.target.dataset.field) return;
+      const t = tickets.find(t => t.id == e.target.dataset.id);
+      if (t) t.datos[e.target.dataset.field] = e.target.value;
+    });
+    tablaBody.addEventListener('change', function(e) {
+      if (!e.target.dataset.field) return;
+      const t = tickets.find(t => t.id == e.target.dataset.id);
+      if (t) t.datos[e.target.dataset.field] = e.target.value;
+    });
+
     // ── Aplicar a todos ──────────────────────────────────────────
     btnAplicar.addEventListener('click', () => {
       const chofer = bulkChofer.value;
@@ -740,17 +723,8 @@
       renderTabla();
     });
 
-    // ── Sincronizar inputs al DOM antes de enviar ────────────────
-    function sincronizarDesdeDom() {
-      tablaBody.querySelectorAll('[data-field]').forEach(el => {
-        const t = tickets.find(t => t.id == el.dataset.id);
-        if (t) t.datos[el.dataset.field] = el.value;
-      });
-    }
-
     // ── Enviar todos ─────────────────────────────────────────────
     btnEnviarTodo.addEventListener('click', async () => {
-      sincronizarDesdeDom();
 
       const pendientes = tickets.filter(t => t.estado === 'pendiente');
       const sinChofer  = pendientes.filter(t => !t.datos.chofer);
@@ -760,19 +734,7 @@
         const msg = [];
         if (sinChofer.length) msg.push(`• ${sinChofer.length} fila(s) sin chofer`);
         if (sinUnidad.length) msg.push(`• ${sinUnidad.length} fila(s) sin unidad`);
-        alert('⚠️ Faltan datos:\n' + msg.join('\n') + '\n\nLas celdas en rojo indican qué falta.');
-        renderTabla(); // Re-render to show red borders on empty required fields
-        return;
-      }
-
-      // Validate no negative numbers
-      const conNegativo = pendientes.filter(t =>
-        (t.datos.litros !== '' && parseFloat(t.datos.litros) < 0) ||
-        (t.datos.monto  !== '' && parseFloat(t.datos.monto)  < 0) ||
-        (t.datos.precio_litro !== '' && parseFloat(t.datos.precio_litro) < 0)
-      );
-      if (conNegativo.length) {
-        alert(`⚠️ ${conNegativo.length} fila(s) tienen valores negativos. Corrígelos antes de enviar.`);
+        alert('⚠️ Faltan datos:\n' + msg.join('\n'));
         return;
       }
 
@@ -794,7 +756,6 @@
               unidad:      t.datos.unidad,
               descripcion: t.datos.descripcion,
               foto:        t.foto,
-              // Enviamos los datos ya revisados — el Apps Script NO re-extrae con IA
               datos_extraidos: {
                 litros:       t.datos.litros       !== '' ? parseFloat(t.datos.litros)       : null,
                 monto_total:  t.datos.monto        !== '' ? parseFloat(t.datos.monto)        : null,
@@ -818,7 +779,6 @@
       await new Promise(r => setTimeout(r, 400));
       overlayEnviando.classList.remove('activo');
 
-      // Resumen
       document.getElementById('resumenOk').textContent   = enviados;
       document.getElementById('resumenErr').textContent  = errores;
       document.getElementById('resumenIcono').textContent = errores === 0 ? '✅' : enviados === 0 ? '❌' : '⚠️';
