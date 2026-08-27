@@ -34,293 +34,241 @@
       min-height: 100%;
     }
 
+    /* ── LOGIN SCREEN ── */
+    .pantalla-login {
+      position: fixed; inset: 0;
+      background: var(--navy);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 32px 24px; z-index: 200;
+    }
+    .login-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radio-lg);
+      padding: 36px 32px;
+      width: 100%; max-width: 340px;
+      text-align: center;
+    }
+    .login-titulo { font-size: 1rem; font-weight: 800; color: var(--blanco); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+    .login-sub    { font-size: 0.72rem; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 28px; }
+    .login-input  {
+      width: 100%; padding: 13px 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: var(--radio-md);
+      color: var(--blanco); font-size: 1rem; font-family: inherit;
+      text-align: center; letter-spacing: 0.2em;
+      outline: none; transition: border-color 0.15s;
+      margin-bottom: 10px;
+    }
+    .login-input:focus { border-color: var(--amber); }
+    .login-input::placeholder { letter-spacing: 0.05em; color: rgba(255,255,255,0.3); }
+    .login-error { font-size: 0.82rem; color: #FCA5A5; min-height: 20px; margin-bottom: 10px; }
+    .login-btn {
+      width: 100%; padding: 14px;
+      background: var(--amber); color: var(--navy);
+      border: none; border-radius: var(--radio-md);
+      font-size: 0.95rem; font-weight: 800; font-family: inherit;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .login-btn:hover { background: var(--amber-dark); }
+    .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* ── HEADER ── */
     .app-header {
       background: var(--navy);
-      padding: 18px 20px 14px;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      padding: 14px 20px 12px;
+      display: flex; align-items: center; gap: 12px;
+      position: sticky; top: 0; z-index: 10;
     }
-    .app-header__logo  { font-size: 1.6rem; display: block; margin-bottom: 3px; }
-    .app-header__titulo { font-size: 0.9rem; font-weight: 800; color: var(--blanco); letter-spacing: 0.06em; text-transform: uppercase; }
+    .header-logo-bloque { text-align: center; }
+    .app-header__logo   { font-size: 1.4rem; display: block; line-height: 1; }
+    .app-header__titulo { font-size: 0.82rem; font-weight: 800; color: var(--blanco); letter-spacing: 0.06em; text-transform: uppercase; }
     .admin-badge {
-      display: inline-block;
-      background: var(--amber);
-      color: var(--navy);
-      font-size: 0.6rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 2px 9px;
-      border-radius: 4px;
-      margin-top: 5px;
+      display: inline-block; background: var(--amber); color: var(--navy);
+      font-size: 0.58rem; font-weight: 800; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 2px 8px; border-radius: 4px; margin-top: 3px;
     }
+    .admin-info {
+      margin-left: auto; display: flex; align-items: center; gap: 8px;
+    }
+    .admin-nombre {
+      font-size: 0.75rem; color: rgba(255,255,255,0.6);
+      font-weight: 500;
+    }
+    .admin-nombre span { color: var(--amber); font-weight: 700; }
+    .btn-cambiar-pass {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px; color: rgba(255,255,255,0.7);
+      font-size: 0.7rem; font-weight: 600; padding: 5px 10px;
+      cursor: pointer; transition: background 0.15s; white-space: nowrap;
+    }
+    .btn-cambiar-pass:hover { background: rgba(255,255,255,0.14); color: var(--blanco); }
 
+    /* ── MODAL CAMBIAR CONTRASEÑA ── */
+    .modal-pass-input {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid var(--borde); border-radius: var(--radio-md);
+      font-size: 0.9rem; font-family: inherit; color: var(--texto);
+      background: var(--fondo); outline: none;
+      margin-bottom: 10px; transition: border-color 0.15s;
+    }
+    .modal-pass-input:focus { border-color: var(--amber); background: var(--blanco); }
+    .modal-pass-error { font-size: 0.8rem; color: var(--rojo); min-height: 18px; margin-bottom: 8px; text-align: left; }
+    .modal-pass-ok    { font-size: 0.8rem; color: var(--verde); min-height: 18px; margin-bottom: 8px; text-align: left; }
+    .modal-btns { display: flex; gap: 8px; margin-top: 4px; }
+    .btn-modal-sec {
+      flex: 1; padding: 10px;
+      border: 2px solid var(--borde); background: transparent;
+      color: var(--texto-suave); border-radius: var(--radio-md);
+      font-size: 0.85rem; font-weight: 600; font-family: inherit; cursor: pointer;
+    }
+    .btn-modal-pri {
+      flex: 1; padding: 10px;
+      background: var(--amber); border: none; color: var(--navy);
+      border-radius: var(--radio-md); font-size: 0.85rem;
+      font-weight: 700; font-family: inherit; cursor: pointer;
+    }
+    .btn-modal-pri:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── LAYOUT ── */
     main { padding: 20px 16px 48px; max-width: 1020px; margin: 0 auto; }
 
+    /* ── FILTRO BAR ── */
+    .filtro-bar {
+      display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;
+    }
+    .btn-filtro {
+      padding: 6px 14px;
+      border: 1.5px solid var(--borde); border-radius: 99px;
+      background: var(--blanco); color: var(--texto-suave);
+      font-size: 0.74rem; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .btn-filtro.activo {
+      background: var(--navy); border-color: var(--navy); color: var(--blanco);
+    }
+    .btn-filtro:not(.activo):hover {
+      border-color: var(--texto-suave); color: var(--texto);
+    }
+
+    /* ── DROP ZONE ── */
     .drop-zone {
-      border: 2.5px dashed var(--amber);
-      border-radius: var(--radio-lg);
-      background: var(--amber-pale);
-      padding: 56px 24px;
-      text-align: center;
-      cursor: pointer;
-      transition: background 0.15s;
-      user-select: none;
-      position: relative;
+      border: 2.5px dashed var(--amber); border-radius: var(--radio-lg);
+      background: var(--amber-pale); padding: 56px 24px;
+      text-align: center; cursor: pointer;
+      transition: background 0.15s; user-select: none; position: relative;
     }
     .drop-zone.over { background: #FDE68A; }
     .drop-zone__icono  { font-size: 3rem; display: block; margin-bottom: 12px; }
     .drop-zone__titulo { font-size: 1.1rem; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
     .drop-zone__hint   { font-size: 0.85rem; color: var(--texto-suave); }
-    #inputFotos {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-    }
+    #inputFotos { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
 
+    /* ── PROGRESO ── */
     .seccion-progreso {
-      background: var(--blanco);
-      border-radius: var(--radio-lg);
-      padding: 44px 24px;
-      text-align: center;
-      box-shadow: var(--sombra);
+      background: var(--blanco); border-radius: var(--radio-lg);
+      padding: 44px 24px; text-align: center; box-shadow: var(--sombra);
     }
     .progreso__spinner {
       width: 48px; height: 48px;
-      border: 4px solid var(--borde);
-      border-top-color: var(--amber);
-      border-radius: 50%;
-      animation: girar 0.75s linear infinite;
+      border: 4px solid var(--borde); border-top-color: var(--amber);
+      border-radius: 50%; animation: girar 0.75s linear infinite;
       margin: 0 auto 16px;
     }
     @keyframes girar { to { transform: rotate(360deg); } }
     .progreso__texto { font-size: 0.95rem; color: var(--texto-suave); margin-bottom: 16px; }
-    .barra-bg {
-      background: var(--borde);
-      border-radius: 99px;
-      height: 8px;
-      overflow: hidden;
-      max-width: 340px;
-      margin: 0 auto;
-    }
-    .barra-fill {
-      height: 100%;
-      background: var(--amber);
-      border-radius: 99px;
-      transition: width 0.3s;
-    }
+    .barra-bg { background: var(--borde); border-radius: 99px; height: 8px; overflow: hidden; max-width: 340px; margin: 0 auto; }
+    .barra-fill { height: 100%; background: var(--amber); border-radius: 99px; transition: width 0.3s; }
 
+    /* ── BULK BAR ── */
     .bulk-bar {
-      background: var(--blanco);
-      border-radius: var(--radio-md);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      box-shadow: var(--sombra);
-      margin-bottom: 10px;
+      background: var(--blanco); border-radius: var(--radio-md);
+      padding: 12px 16px; display: flex; align-items: center;
+      flex-wrap: wrap; gap: 10px; box-shadow: var(--sombra); margin-bottom: 10px;
     }
-    .bulk-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--texto-suave);
-      white-space: nowrap;
-    }
+    .bulk-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--texto-suave); white-space: nowrap; }
     .bulk-sel {
-      padding: 7px 30px 7px 10px;
-      border: 1.5px solid var(--borde);
-      border-radius: var(--radio-md);
-      font-size: 0.82rem;
-      font-family: inherit;
-      color: var(--texto);
-      background: var(--fondo);
+      padding: 7px 30px 7px 10px; border: 1.5px solid var(--borde);
+      border-radius: var(--radio-md); font-size: 0.82rem; font-family: inherit;
+      color: var(--texto); background: var(--fondo);
       -webkit-appearance: none; appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 8px center;
-      cursor: pointer;
+      background-repeat: no-repeat; background-position: right 8px center; cursor: pointer;
     }
     .bulk-sel:focus { outline: none; border-color: var(--amber); }
     .btn-aplicar {
-      padding: 7px 14px;
-      background: var(--navy);
-      color: var(--blanco);
-      border: none;
-      border-radius: var(--radio-md);
-      font-size: 0.75rem;
-      font-weight: 700;
-      cursor: pointer;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      padding: 7px 14px; background: var(--navy); color: var(--blanco);
+      border: none; border-radius: var(--radio-md); font-size: 0.75rem;
+      font-weight: 700; cursor: pointer; letter-spacing: 0.04em; text-transform: uppercase;
     }
     .bulk-spacer { flex: 1; }
     .bulk-contador { font-size: 0.78rem; color: var(--texto-suave); white-space: nowrap; }
 
-    .tabla-wrap {
-      background: var(--blanco);
-      border-radius: var(--radio-lg);
-      box-shadow: var(--sombra);
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
+    /* ── TABLA ── */
+    .tabla-wrap { background: var(--blanco); border-radius: var(--radio-lg); box-shadow: var(--sombra); overflow: hidden; margin-bottom: 12px; }
     .tabla-scroll { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; min-width: 900px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; min-width: 960px; }
     thead tr { background: var(--navy); }
-    thead th {
-      color: rgba(255,255,255,0.65);
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.65rem;
-      letter-spacing: 0.06em;
-      padding: 10px 8px;
-      text-align: left;
-      white-space: nowrap;
-    }
+    thead th { color: rgba(255,255,255,0.65); font-weight: 600; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.06em; padding: 10px 8px; text-align: left; white-space: nowrap; }
     tbody tr { border-bottom: 1px solid var(--borde); }
     tbody tr:last-child { border-bottom: none; }
     tbody tr.fila-ok    { background: #F0FDF4; }
     tbody tr.fila-error { background: #FFF5F5; }
     tbody td { padding: 7px 8px; vertical-align: middle; }
 
-    .thumb {
-      width: 44px; height: 44px;
-      object-fit: cover;
-      border-radius: 8px;
-      cursor: pointer;
-      border: 1.5px solid var(--borde);
-      display: block;
-    }
+    .thumb { width: 44px; height: 44px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1.5px solid var(--borde); display: block; }
 
     .td-inp, .td-sel {
-      width: 100%;
-      padding: 6px 8px;
-      border: 1.5px solid var(--borde);
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-family: inherit;
-      color: var(--texto);
-      background: var(--fondo);
-      transition: border-color 0.15s;
+      width: 100%; padding: 6px 8px;
+      border: 1.5px solid var(--borde); border-radius: 8px;
+      font-size: 0.78rem; font-family: inherit; color: var(--texto);
+      background: var(--fondo); transition: border-color 0.15s;
     }
     .td-sel {
       -webkit-appearance: none; appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 6px center;
-      padding-right: 22px;
-      cursor: pointer;
+      background-repeat: no-repeat; background-position: right 6px center; padding-right: 22px; cursor: pointer;
     }
     .td-inp:focus, .td-sel:focus { outline: none; border-color: var(--amber); background: var(--blanco); }
     .td-inp:disabled, .td-sel:disabled { opacity: 0.5; cursor: not-allowed; }
-    .td-num   { text-align: right; width: 76px; }
-    .td-fecha { width: 130px; }
-    .td-hora  { width: 80px; }
+    .td-num    { text-align: right; width: 76px; }
+    .td-fecha  { width: 130px; }
+    .td-hora   { width: 80px; }
     .td-chofer { min-width: 128px; }
     .td-unidad { min-width: 138px; }
 
-    .badge {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 99px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      white-space: nowrap;
-    }
+    /* Celda con advertencia */
+    .td-alerta { border-color: var(--amber) !important; background: #FFFBEB !important; }
+
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 99px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
     .badge-alta  { background: #DCFCE7; color: #15803D; }
     .badge-media { background: #FEF9C3; color: #A16207; }
     .badge-baja  { background: #FEE2E2; color: #B91C1C; }
     .badge-sin   { background: var(--borde); color: var(--texto-suave); }
 
-    .btn-del {
-      background: none; border: none;
-      color: var(--texto-suave);
-      cursor: pointer;
-      font-size: 1rem;
-      padding: 4px 8px;
-      border-radius: 6px;
-      transition: background 0.1s, color 0.1s;
-    }
+    .btn-del { background: none; border: none; color: var(--texto-suave); cursor: pointer; font-size: 1rem; padding: 4px 8px; border-radius: 6px; transition: background 0.1s, color 0.1s; }
     .btn-del:hover { background: #FEE2E2; color: var(--rojo); }
 
-    .btn-agregar {
-      width: 100%;
-      padding: 12px;
-      border: 2px dashed var(--borde);
-      border-radius: var(--radio-md);
-      background: transparent;
-      color: var(--texto-suave);
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: border-color 0.15s, color 0.15s;
-      position: relative;
-      margin-bottom: 14px;
-    }
+    .btn-agregar { width: 100%; padding: 12px; border: 2px dashed var(--borde); border-radius: var(--radio-md); background: transparent; color: var(--texto-suave); font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: border-color 0.15s, color 0.15s; position: relative; margin-bottom: 14px; }
     .btn-agregar:hover { border-color: var(--amber); color: var(--navy); }
-    #inputAgregar {
-      position: absolute; inset: 0;
-      opacity: 0; cursor: pointer;
-      width: 100%; height: 100%;
-    }
+    #inputAgregar { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
 
-    .btn-enviar-todo {
-      width: 100%;
-      padding: 18px;
-      background: var(--amber);
-      color: var(--navy);
-      border: none;
-      border-radius: var(--radio-md);
-      font-size: 1rem;
-      font-weight: 800;
-      font-family: inherit;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-    }
+    .btn-enviar-todo { width: 100%; padding: 18px; background: var(--amber); color: var(--navy); border: none; border-radius: var(--radio-md); font-size: 1rem; font-weight: 800; font-family: inherit; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: background 0.15s, transform 0.1s; }
     .btn-enviar-todo:active:not(:disabled) { background: var(--amber-dark); transform: scale(0.98); }
     .btn-enviar-todo:disabled { background: var(--borde); color: var(--texto-suave); cursor: not-allowed; }
 
-    .overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      z-index: 50;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
+    /* ── OVERLAY (enviando + cambiar pass) ── */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 50; align-items: center; justify-content: center; padding: 24px; }
     .overlay.activo { display: flex; }
-    .overlay-card {
-      background: var(--blanco);
-      border-radius: var(--radio-lg);
-      padding: 32px 28px;
-      text-align: center;
-      max-width: 340px;
-      width: 100%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    }
-    .overlay-card__icono  { font-size: 2.5rem; margin-bottom: 12px; }
+    .overlay-card { background: var(--blanco); border-radius: var(--radio-lg); padding: 32px 28px; text-align: center; max-width: 340px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
     .overlay-card__titulo { font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; }
     .overlay-card__sub    { font-size: 0.85rem; color: var(--texto-suave); margin-bottom: 20px; }
 
-    .resumen {
-      background: var(--blanco);
-      border-radius: var(--radio-lg);
-      padding: 36px 24px;
-      text-align: center;
-      box-shadow: var(--sombra);
-    }
+    /* ── RESUMEN ── */
+    .resumen { background: var(--blanco); border-radius: var(--radio-lg); padding: 36px 24px; text-align: center; box-shadow: var(--sombra); }
     .resumen__icono  { font-size: 4rem; margin-bottom: 12px; }
     .resumen__titulo { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; }
     .resumen__texto  { font-size: 0.9rem; color: var(--texto-suave); line-height: 1.65; }
@@ -328,42 +276,14 @@
     .resumen__stat   { background: var(--fondo); border-radius: var(--radio-md); padding: 16px; }
     .resumen__stat-v { font-size: 2rem; font-weight: 800; }
     .resumen__stat-l { font-size: 0.75rem; color: var(--texto-suave); margin-top: 2px; }
-    .btn-sec {
-      margin-top: 12px;
-      padding: 14px 28px;
-      border: 2.5px solid var(--navy);
-      background: transparent;
-      color: var(--navy);
-      border-radius: var(--radio-md);
-      font-size: 0.9rem;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
+    .btn-sec { margin-top: 12px; padding: 14px 28px; border: 2.5px solid var(--navy); background: transparent; color: var(--navy); border-radius: var(--radio-md); font-size: 0.9rem; font-weight: 700; font-family: inherit; cursor: pointer; letter-spacing: 0.04em; text-transform: uppercase; }
     .btn-sec + .btn-sec { margin-left: 8px; }
 
-    .modal-foto {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.88);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
+    /* ── MODAL FOTO ── */
+    .modal-foto { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
     .modal-foto.activo { display: flex; }
     .modal-foto img { max-width: 100%; max-height: 90vh; border-radius: var(--radio-md); object-fit: contain; }
-    .modal-cerrar {
-      position: absolute; top: 16px; right: 16px;
-      width: 40px; height: 40px;
-      background: rgba(255,255,255,0.15);
-      border: none; border-radius: 50%;
-      color: white; font-size: 1.2rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-    }
+    .modal-cerrar { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; background: rgba(255,255,255,0.15); border: none; border-radius: 50%; color: white; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
     .oculto { display: none !important; }
   </style>
@@ -371,14 +291,34 @@
 
 <body>
 
+  <!-- ══ LOGIN SCREEN ══ -->
+  <div id="pantallaLogin" class="pantalla-login">
+    <div class="login-card">
+      <span style="font-size:2.8rem;display:block;margin-bottom:14px">⛽</span>
+      <div class="login-titulo">Notas de Diesel</div>
+      <div class="login-sub">Panel Administrativo</div>
+      <input type="password" id="loginInput" class="login-input" placeholder="Contraseña" autocomplete="current-password" />
+      <div class="login-error" id="loginError"></div>
+      <button class="login-btn" id="loginBtn">Entrar →</button>
+    </div>
+  </div>
+
+  <!-- ══ HEADER ══ -->
   <header class="app-header">
-    <span class="app-header__logo">⛽</span>
-    <div class="app-header__titulo">Notas de Diesel</div>
-    <div class="admin-badge">Panel Administrativo</div>
+    <div class="header-logo-bloque">
+      <span class="app-header__logo">⛽</span>
+      <div class="app-header__titulo">Notas de Diesel</div>
+      <div class="admin-badge">Panel Administrativo</div>
+    </div>
+    <div class="admin-info" id="adminInfo">
+      <div class="admin-nombre">Hola, <span id="adminNombreHeader">—</span></div>
+      <button class="btn-cambiar-pass" id="btnCambiarPass">🔑 Contraseña</button>
+    </div>
   </header>
 
   <main>
 
+    <!-- ① Drop zone -->
     <div id="seccionDrop">
       <div class="drop-zone" id="dropZone">
         <span class="drop-zone__icono">📂</span>
@@ -388,6 +328,7 @@
       </div>
     </div>
 
+    <!-- ② Procesando -->
     <div id="seccionProgreso" class="oculto">
       <div class="seccion-progreso">
         <div class="progreso__spinner"></div>
@@ -398,16 +339,25 @@
       </div>
     </div>
 
+    <!-- ③ Tabla editable -->
     <div id="seccionTabla" class="oculto">
 
+      <!-- Filtros -->
+      <div class="filtro-bar" id="filtroBar">
+        <button class="btn-filtro activo" data-filtro="todos">Todos</button>
+        <button class="btn-filtro" data-filtro="advertencias">⚠️ Con advertencias</button>
+        <button class="btn-filtro" data-filtro="baja-confianza">🔴 Baja confianza</button>
+      </div>
+
+      <!-- Acciones masivas -->
       <div class="bulk-bar">
         <span class="bulk-label">Aplicar a todos:</span>
         <select class="bulk-sel" id="bulkChofer">
           <option value="">— Chofer —</option>
           <option value="Juan Sandoval">Juan Sandoval</option>
-            <option value="Noe Granados">Noe Granados</option>
-            <option value="Jose Gabriel">Jose Gabribel</option>
-            <option value="Juan Alvaro (el pollito)">Juan Alvaro (el pollito)</option>
+          <option value="Noe Granados">Noe Granados</option>
+          <option value="Jose Gabriel">Jose Gabribel</option>
+          <option value="Juan Alvaro (el pollito)">Juan Alvaro (el pollito)</option>
         </select>
         <select class="bulk-sel" id="bulkUnidad">
           <option value="">— Unidad —</option>
@@ -420,6 +370,7 @@
         <span class="bulk-contador" id="contador"></span>
       </div>
 
+      <!-- Tabla -->
       <div class="tabla-wrap">
         <div class="tabla-scroll">
           <table>
@@ -456,6 +407,7 @@
 
     </div>
 
+    <!-- ④ Resumen -->
     <div id="seccionResumen" class="oculto">
       <div class="resumen">
         <div class="resumen__icono" id="resumenIcono">✅</div>
@@ -478,6 +430,7 @@
 
   </main>
 
+  <!-- Overlay enviando -->
   <div class="overlay" id="overlayEnviando">
     <div class="overlay-card">
       <div class="progreso__spinner" style="margin: 0 auto 16px;"></div>
@@ -489,6 +442,24 @@
     </div>
   </div>
 
+  <!-- Modal cambiar contraseña -->
+  <div class="overlay" id="modalPassword">
+    <div class="overlay-card" style="text-align:left">
+      <div class="overlay-card__titulo" style="text-align:center">🔑 Cambiar contraseña</div>
+      <div class="overlay-card__sub" style="text-align:center">Escribe tu contraseña actual y la nueva dos veces para confirmar</div>
+      <input type="password" id="passActual"  class="modal-pass-input" placeholder="Contraseña actual" autocomplete="current-password"/>
+      <input type="password" id="passNueva"   class="modal-pass-input" placeholder="Nueva contraseña"/>
+      <input type="password" id="passConfirm" class="modal-pass-input" placeholder="Confirmar nueva contraseña" style="margin-bottom:6px"/>
+      <div class="modal-pass-error" id="passError"></div>
+      <div class="modal-pass-ok"    id="passOk"></div>
+      <div class="modal-btns">
+        <button class="btn-modal-sec" id="btnCerrarPass">Cancelar</button>
+        <button class="btn-modal-pri" id="btnConfirmarPass">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal foto -->
   <div class="modal-foto" id="modalFoto">
     <button class="modal-cerrar" id="btnCerrarModal">✕</button>
     <img id="modalImg" alt="Foto del ticket" />
@@ -496,6 +467,7 @@
 
   <script>
 
+    // ── Configuración ────────────────────────────────────────────
     const BACKEND_URL   = 'https://script.google.com/macros/s/AKfycbzjMRXk9isshJ05TyGShojZHpXAiub8aotRQItlfhNM5oEvu7hb5125C08Hva307UCOhQ/exec';
     const IMG_ANCHO_MAX = 1280;
     const IMG_CALIDAD   = 0.78;
@@ -503,9 +475,38 @@
     const CHOFERES = ['Juan Sandoval','Noe Granados','Jose Gabribel','Juan Alvaro (el pollito)'];
     const UNIDADES = ['KT5793A — VOLVO','LB89559 — KENWORTH NARANJA','VT08F — KENWORTH BLANCO'];
 
-    let tickets   = [];
-    let idCounter = 0;
+    // Reglas de pre-evaluación (ajusta estos valores según tu operación)
+    const ALERTAS = {
+      litros_min:  30,    // Menos de 30L → carga inusualmente baja
+      precio_min:  15,    // Menos de $15/L → precio fuera de rango
+      precio_max:  45,    // Más de $45/L → precio fuera de rango
+      dias_max:    60,    // Más de 60 días de antigüedad → fecha sospechosa
+      anio_min:    2024,  // Año antes de 2024 → muy antiguo
+      diff_monto:  0.10   // Diferencia > 10% entre litros×precio y monto → inconsistente
+    };
 
+    // ── Estado ───────────────────────────────────────────────────
+    let tickets      = [];
+    let idCounter    = 0;
+    let adminNombre  = sessionStorage.getItem('admin_nombre') || '';
+    let filtroActual = 'todos';
+
+    // ── Referencias DOM ──────────────────────────────────────────
+    const pantallaLogin   = document.getElementById('pantallaLogin');
+    const loginInput      = document.getElementById('loginInput');
+    const loginBtn        = document.getElementById('loginBtn');
+    const loginError      = document.getElementById('loginError');
+    const adminInfo       = document.getElementById('adminInfo');
+    const adminNombreHdr  = document.getElementById('adminNombreHeader');
+    const btnCambiarPass  = document.getElementById('btnCambiarPass');
+    const modalPassword   = document.getElementById('modalPassword');
+    const passActual      = document.getElementById('passActual');
+    const passNueva       = document.getElementById('passNueva');
+    const passConfirm     = document.getElementById('passConfirm');
+    const passError       = document.getElementById('passError');
+    const passOk          = document.getElementById('passOk');
+    const btnCerrarPass   = document.getElementById('btnCerrarPass');
+    const btnConfirmarPass= document.getElementById('btnConfirmarPass');
     const seccionDrop     = document.getElementById('seccionDrop');
     const seccionProgreso = document.getElementById('seccionProgreso');
     const seccionTabla    = document.getElementById('seccionTabla');
@@ -530,14 +531,93 @@
     const btnNuevoLote    = document.getElementById('btnNuevoLote');
     const btnVerTabla     = document.getElementById('btnVerTabla');
 
-    // ── Mostrar sección ──────────────────────────────────────────
+    // ── Login ────────────────────────────────────────────────────
+    function mostrarApp() {
+      pantallaLogin.style.display = 'none';
+      adminNombreHdr.textContent = adminNombre;
+    }
+
+    async function intentarLogin() {
+      const password = loginInput.value.trim();
+      if (!password) { loginError.textContent = 'Escribe tu contraseña.'; return; }
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Verificando…';
+      loginError.textContent = '';
+      try {
+        const resp = await fetch(BACKEND_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+          body: JSON.stringify({ accion: 'login', password })
+        });
+        const result = await resp.json();
+        if (result.exito) {
+          adminNombre = result.nombre;
+          sessionStorage.setItem('admin_nombre', adminNombre);
+          mostrarApp();
+        } else {
+          loginError.textContent = result.mensaje || 'Contraseña incorrecta.';
+          loginInput.value = '';
+          loginInput.focus();
+        }
+      } catch {
+        loginError.textContent = 'Error de conexión. Intenta de nuevo.';
+      }
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Entrar →';
+    }
+
+    loginBtn.addEventListener('click', intentarLogin);
+    loginInput.addEventListener('keydown', e => { if (e.key === 'Enter') intentarLogin(); });
+
+    // ── Cambiar contraseña ────────────────────────────────────────
+    btnCambiarPass.addEventListener('click', () => {
+      passActual.value = ''; passNueva.value = ''; passConfirm.value = '';
+      passError.textContent = ''; passOk.textContent = '';
+      modalPassword.classList.add('activo');
+      passActual.focus();
+    });
+    btnCerrarPass.addEventListener('click', () => modalPassword.classList.remove('activo'));
+
+    btnConfirmarPass.addEventListener('click', async () => {
+      passError.textContent = ''; passOk.textContent = '';
+      const actual  = passActual.value.trim();
+      const nueva   = passNueva.value.trim();
+      const confirm = passConfirm.value.trim();
+
+      if (!actual)  { passError.textContent = 'Escribe tu contraseña actual.'; return; }
+      if (!nueva)   { passError.textContent = 'Escribe la nueva contraseña.'; return; }
+      if (nueva !== confirm) { passError.textContent = 'Las contraseñas nuevas no coinciden.'; return; }
+      if (nueva === actual)  { passError.textContent = 'La nueva contraseña debe ser diferente a la actual.'; return; }
+
+      btnConfirmarPass.disabled = true;
+      try {
+        const resp = await fetch(BACKEND_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+          body: JSON.stringify({ accion: 'cambiar_password', password_actual: actual, password_nueva: nueva })
+        });
+        const result = await resp.json();
+        if (result.exito) {
+          passOk.textContent = '✅ ' + (result.mensaje || 'Contraseña actualizada.');
+          passActual.value = ''; passNueva.value = ''; passConfirm.value = '';
+          setTimeout(() => modalPassword.classList.remove('activo'), 1800);
+        } else {
+          passError.textContent = result.mensaje || 'Error al cambiar la contraseña.';
+        }
+      } catch {
+        passError.textContent = 'Error de conexión.';
+      }
+      btnConfirmarPass.disabled = false;
+    });
+
+    // ── Mostrar sección ───────────────────────────────────────────
     function mostrar(cual) {
       [seccionDrop, seccionProgreso, seccionTabla, seccionResumen].forEach(s => s.classList.add('oculto'));
       cual.classList.remove('oculto');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ── Comprimir imagen ─────────────────────────────────────────
+    // ── Comprimir imagen ──────────────────────────────────────────
     function procesarImagen(file) {
       return new Promise((resolve, reject) => {
         const lector = new FileReader();
@@ -559,7 +639,7 @@
       });
     }
 
-    // ── Extraer datos via Apps Script ────────────────────────────
+    // ── Extraer datos via Apps Script ─────────────────────────────
     async function extraerDatos(fotoBase64) {
       try {
         const resp = await fetch(BACKEND_URL, {
@@ -572,17 +652,71 @@
       } catch { return {}; }
     }
 
+    // ── Pre-evaluación de valores ilógicos ────────────────────────
+    // Devuelve un objeto { campo: 'descripción de advertencia' }
+    // Solo los campos con advertencia aparecen en el objeto.
+    function evaluarTicket(d) {
+      const av = {};
+      const L  = d.litros       !== '' ? parseFloat(d.litros)       : NaN;
+      const M  = d.monto        !== '' ? parseFloat(d.monto)        : NaN;
+      const P  = d.precio_litro !== '' ? parseFloat(d.precio_litro) : NaN;
+
+      if (!isNaN(L) && L > 0 && L < ALERTAS.litros_min)
+        av.litros = `Carga baja: ${L}L (mín. ${ALERTAS.litros_min}L)`;
+
+      if (!isNaN(L) && L > 0 && !isNaN(M) && M === 0)
+        av.monto = 'Monto $0 con litros positivos';
+
+      if (!isNaN(P) && P > 0 && (P < ALERTAS.precio_min || P > ALERTAS.precio_max))
+        av.precio_litro = `Precio fuera de rango: $${P}/L (esperado $${ALERTAS.precio_min}-$${ALERTAS.precio_max})`;
+
+      if (d.fecha_ticket) {
+        const f = new Date(d.fecha_ticket + 'T12:00:00');
+        if (!isNaN(f.getTime())) {
+          if (f.getFullYear() < ALERTAS.anio_min) {
+            av.fecha_ticket = `Año muy antiguo: ${f.getFullYear()}`;
+          } else {
+            const dias = Math.round((Date.now() - f.getTime()) / 86400000);
+            if (dias > ALERTAS.dias_max)
+              av.fecha_ticket = `Fecha antigua: hace ${dias} días`;
+          }
+        }
+      }
+
+      // Inconsistencia matemática (solo si los demás campos no están ya marcados)
+      if (!isNaN(L) && !isNaN(P) && !isNaN(M) && L > 0 && P > 0 && M > 0
+          && !av.litros && !av.monto && !av.precio_litro) {
+        const esp = L * P;
+        if (Math.abs(esp - M) / M > ALERTAS.diff_monto)
+          av.monto = `Inconsistencia: ${L}L × $${P} = $${esp.toFixed(0)} ≠ $${M}`;
+      }
+
+      return av;
+    }
+
+    // ── Filtrado y orden de la tabla ──────────────────────────────
+    function ticketsFiltrados() {
+      if (filtroActual === 'advertencias') {
+        return tickets
+          .filter(t => t.estado === 'pendiente' && Object.keys(evaluarTicket(t.datos)).length > 0)
+          .sort((a, b) => Object.keys(evaluarTicket(b.datos)).length - Object.keys(evaluarTicket(a.datos)).length);
+      }
+      if (filtroActual === 'baja-confianza') {
+        return tickets
+          .filter(t => t.estado === 'pendiente' && t.datos.confianza != null && t.datos.confianza < 60)
+          .sort((a, b) => (a.datos.confianza ?? 100) - (b.datos.confianza ?? 100));
+      }
+      return tickets;
+    }
+
     // ── Procesar lote de archivos ─────────────────────────────────
     async function procesarArchivos(files) {
       const imgs = Array.from(files).filter(f => f.type.startsWith('image/'));
       if (!imgs.length) return;
-
       mostrar(seccionProgreso);
-
       for (let i = 0; i < imgs.length; i++) {
         textoProgreso.textContent = `Leyendo foto ${i + 1} de ${imgs.length}…`;
         barraProgreso.style.width = Math.round(i / imgs.length * 100) + '%';
-
         try {
           const foto  = await procesarImagen(imgs[i]);
           const datos = await extraerDatos(foto);
@@ -612,26 +746,48 @@
           });
         }
       }
-
       barraProgreso.style.width = '100%';
       renderTabla();
       mostrar(seccionTabla);
     }
 
-    // ── Renderizar tabla ─────────────────────────────────────────
+    // ── Renderizar tabla ──────────────────────────────────────────
     function renderTabla() {
+      const lista      = ticketsFiltrados();
       const pendientes = tickets.filter(t => t.estado === 'pendiente').length;
-      contador.textContent = `${tickets.length} foto${tickets.length !== 1 ? 's' : ''} · ${pendientes} por enviar`;
+      const conAv      = tickets.filter(t => t.estado === 'pendiente' && Object.keys(evaluarTicket(t.datos)).length > 0).length;
+
+      let txt = `${tickets.length} foto${tickets.length !== 1 ? 's' : ''} · ${pendientes} por enviar`;
+      if (conAv > 0) txt += ` · ⚠️ ${conAv} con advertencias`;
+      contador.textContent = txt;
       btnEnviarTodo.disabled = pendientes === 0;
 
       const optsChofer = CHOFERES.map(c => `<option value="${c}">${c}</option>`).join('');
       const optsUnidad = UNIDADES.map(u => `<option value="${u}">${u}</option>`).join('');
 
-      tablaBody.innerHTML = tickets.map((t, idx) => {
-        const d = t.datos;
+      if (lista.length === 0 && filtroActual !== 'todos') {
+        tablaBody.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:28px;color:var(--texto-suave)">
+          ${filtroActual === 'advertencias' ? 'Ningún ticket con advertencias 👍' : 'Ningún ticket con baja confianza 👍'}
+        </td></tr>`;
+        return;
+      }
+
+      tablaBody.innerHTML = lista.map((t, idx) => {
+        const d   = t.datos;
+        const av  = evaluarTicket(d);
+        const avN = Object.keys(av).length;
         const dis = t.estado !== 'pendiente' ? 'disabled' : '';
-        const filaClass = t.estado === 'ok' ? 'fila-ok' : t.estado === 'error' ? 'fila-error' : '';
+        const filaClass  = t.estado === 'ok' ? 'fila-ok' : t.estado === 'error' ? 'fila-error' : '';
         const estadoIcon = t.estado === 'ok' ? '✅' : t.estado === 'error' ? '❌' : '';
+
+        // Número de fila con indicador de advertencias
+        const numDisplay = estadoIcon || (avN > 0
+          ? `<span style="color:var(--amber);font-weight:700;cursor:default" title="${Object.values(av).join('\n')}">⚠️${avN}</span>`
+          : String(idx + 1));
+
+        // Clase CSS para celdas con advertencia
+        const cls = campo => av[campo] ? 'td-alerta' : '';
+        const tit = campo => av[campo] ? `title="${av[campo]}"` : '';
 
         let badgeClass = 'badge-sin', badgeTxt = '—';
         if (d.confianza != null) {
@@ -641,22 +797,18 @@
 
         return `<tr class="${filaClass}" data-id="${t.id}">
           <td>${t.foto ? `<img class="thumb" src="${t.foto}" alt="ticket" data-thumb="${t.id}"/>` : '🚫'}</td>
-          <td style="color:var(--texto-suave);font-weight:600">${estadoIcon || (idx + 1)}</td>
-          <td>
-            <select class="td-sel td-chofer" data-id="${t.id}" data-field="chofer" ${dis}>
-              <option value="">— Chofer —</option>${optsChofer}
-            </select>
-          </td>
-          <td>
-            <select class="td-sel td-unidad" data-id="${t.id}" data-field="unidad" ${dis}>
-              <option value="">— Unidad —</option>${optsUnidad}
-            </select>
-          </td>
-          <td><input class="td-inp td-fecha" type="date" value="${d.fecha_ticket}" data-id="${t.id}" data-field="fecha_ticket" ${dis}/></td>
+          <td style="text-align:center">${numDisplay}</td>
+          <td><select class="td-sel td-chofer" data-id="${t.id}" data-field="chofer" ${dis}>
+            <option value="">— Chofer —</option>${optsChofer}
+          </select></td>
+          <td><select class="td-sel td-unidad" data-id="${t.id}" data-field="unidad" ${dis}>
+            <option value="">— Unidad —</option>${optsUnidad}
+          </select></td>
+          <td><input class="td-inp td-fecha ${cls('fecha_ticket')}" type="date" value="${d.fecha_ticket}" data-id="${t.id}" data-field="fecha_ticket" ${tit('fecha_ticket')} ${dis}/></td>
           <td><input class="td-inp td-hora" type="time" value="${d.hora_ticket}" data-id="${t.id}" data-field="hora_ticket" ${dis}/></td>
-          <td><input class="td-inp td-num" type="number" value="${d.litros}" data-id="${t.id}" data-field="litros" placeholder="0.0" step="0.001" min="0" ${dis}/></td>
-          <td><input class="td-inp td-num" type="number" value="${d.monto}" data-id="${t.id}" data-field="monto" placeholder="0.00" step="0.01" min="0" ${dis}/></td>
-          <td><input class="td-inp td-num" type="number" value="${d.precio_litro}" data-id="${t.id}" data-field="precio_litro" placeholder="0.00" step="0.001" min="0" ${dis}/></td>
+          <td><input class="td-inp td-num ${cls('litros')}" type="number" value="${d.litros}" data-id="${t.id}" data-field="litros" placeholder="0.0" step="0.001" min="0" ${tit('litros')} ${dis}/></td>
+          <td><input class="td-inp td-num ${cls('monto')}" type="number" value="${d.monto}" data-id="${t.id}" data-field="monto" placeholder="0.00" step="0.01" min="0" ${tit('monto')} ${dis}/></td>
+          <td><input class="td-inp td-num ${cls('precio_litro')}" type="number" value="${d.precio_litro}" data-id="${t.id}" data-field="precio_litro" placeholder="0.00" step="0.001" min="0" ${tit('precio_litro')} ${dis}/></td>
           <td><input class="td-inp" style="min-width:110px" type="text" value="${d.gasolinera}" data-id="${t.id}" data-field="gasolinera" placeholder="Gasolinera" ${dis}/></td>
           <td><input class="td-inp" style="min-width:110px" type="text" value="${d.descripcion}" data-id="${t.id}" data-field="descripcion" placeholder="Opcional" ${dis}/></td>
           <td><span class="badge ${badgeClass}">${badgeTxt}</span></td>
@@ -664,15 +816,17 @@
         </tr>`;
       }).join('');
 
-      tickets.forEach(t => {
+      // Restaurar selects
+      lista.forEach(t => {
         const row = tablaBody.querySelector(`tr[data-id="${t.id}"]`);
         if (!row) return;
-        const selChofer = row.querySelector('[data-field="chofer"]');
-        const selUnidad = row.querySelector('[data-field="unidad"]');
-        if (selChofer) selChofer.value = t.datos.chofer;
-        if (selUnidad) selUnidad.value = t.datos.unidad;
+        const sc = row.querySelector('[data-field="chofer"]');
+        const su = row.querySelector('[data-field="unidad"]');
+        if (sc) sc.value = t.datos.chofer;
+        if (su) su.value = t.datos.unidad;
       });
 
+      // Eliminar fila
       tablaBody.querySelectorAll('[data-del]').forEach(btn => {
         btn.addEventListener('click', e => {
           const id = parseInt(e.target.dataset.del);
@@ -681,6 +835,7 @@
         });
       });
 
+      // Ampliar foto
       tablaBody.querySelectorAll('[data-thumb]').forEach(img => {
         img.addEventListener('click', e => {
           const t = tickets.find(t => t.id == e.target.dataset.thumb);
@@ -689,6 +844,7 @@
       });
     }
 
+    // ── Event delegation edición ──────────────────────────────────
     tablaBody.addEventListener('input', function(e) {
       if (!e.target.dataset.field) return;
       const t = tickets.find(t => t.id == e.target.dataset.id);
@@ -700,6 +856,17 @@
       if (t) t.datos[e.target.dataset.field] = e.target.value;
     });
 
+    // ── Filtros ───────────────────────────────────────────────────
+    document.querySelectorAll('.btn-filtro').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('activo'));
+        btn.classList.add('activo');
+        filtroActual = btn.dataset.filtro;
+        renderTabla();
+      });
+    });
+
+    // ── Aplicar a todos ───────────────────────────────────────────
     btnAplicar.addEventListener('click', () => {
       const chofer = bulkChofer.value;
       const unidad = bulkUnidad.value;
@@ -712,15 +879,14 @@
       renderTabla();
     });
 
+    // ── Enviar todos ──────────────────────────────────────────────
     btnEnviarTodo.addEventListener('click', async () => {
 
-      // Leer valores actuales directo del DOM antes de enviar
+      // Leer valores actuales directo del DOM
       tickets.filter(t => t.estado === 'pendiente').forEach(t => {
         const row = tablaBody.querySelector(`tr[data-id="${t.id}"]`);
         if (!row) return;
-        row.querySelectorAll('[data-field]').forEach(el => {
-          t.datos[el.dataset.field] = el.value;
-        });
+        row.querySelectorAll('[data-field]').forEach(el => { t.datos[el.dataset.field] = el.value; });
       });
 
       const pendientes = tickets.filter(t => t.estado === 'pendiente');
@@ -749,10 +915,11 @@
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
             body: JSON.stringify({
-              chofer:      t.datos.chofer,
-              unidad:      t.datos.unidad,
-              descripcion: t.datos.descripcion,
-              foto:        t.foto,
+              chofer:       t.datos.chofer,
+              unidad:       t.datos.unidad,
+              nombre_admin: adminNombre,
+              descripcion:  t.datos.descripcion,
+              foto:         t.foto,
               datos_extraidos: {
                 litros:       t.datos.litros       !== '' ? parseFloat(t.datos.litros)       : null,
                 monto_total:  t.datos.monto        !== '' ? parseFloat(t.datos.monto)        : null,
@@ -768,8 +935,7 @@
           t.estado = result.exito ? 'ok' : 'error';
           result.exito ? enviados++ : errores++;
         } catch {
-          t.estado = 'error';
-          errores++;
+          t.estado = 'error'; errores++;
         }
       }
 
@@ -777,19 +943,21 @@
       await new Promise(r => setTimeout(r, 400));
       overlayEnviando.classList.remove('activo');
 
-      document.getElementById('resumenOk').textContent   = enviados;
-      document.getElementById('resumenErr').textContent  = errores;
-      document.getElementById('resumenIcono').textContent = errores === 0 ? '✅' : enviados === 0 ? '❌' : '⚠️';
+      document.getElementById('resumenOk').textContent    = enviados;
+      document.getElementById('resumenErr').textContent   = errores;
+      document.getElementById('resumenIcono').textContent  = errores === 0 ? '✅' : enviados === 0 ? '❌' : '⚠️';
       document.getElementById('resumenTitulo').textContent = errores === 0 ? '¡Todo registrado!' : enviados === 0 ? 'Error al enviar' : 'Enviado con errores';
       document.getElementById('resumenTexto').textContent  = `${enviados} ticket${enviados !== 1 ? 's' : ''} guardado${enviados !== 1 ? 's' : ''} en Drive y Sheets.` + (errores ? ` ${errores} con error.` : '');
       btnVerTabla.style.display = errores > 0 ? 'inline-block' : 'none';
       mostrar(seccionResumen);
     });
 
+    // ── Agregar más fotos ─────────────────────────────────────────
     inputAgregar.addEventListener('change', async e => {
       if (e.target.files.length) { await procesarArchivos(e.target.files); e.target.value = ''; }
     });
 
+    // ── Drop zone ─────────────────────────────────────────────────
     inputFotos.addEventListener('change', async e => {
       if (e.target.files.length) await procesarArchivos(e.target.files);
     });
@@ -800,15 +968,26 @@
       if (e.dataTransfer.files.length) await procesarArchivos(e.dataTransfer.files);
     });
 
+    // ── Modales ───────────────────────────────────────────────────
     btnCerrarModal.addEventListener('click', () => modalFoto.classList.remove('activo'));
     modalFoto.addEventListener('click', e => { if (e.target === modalFoto) modalFoto.classList.remove('activo'); });
+    modalPassword.addEventListener('click', e => { if (e.target === modalPassword) modalPassword.classList.remove('activo'); });
 
+    // ── Resumen botones ───────────────────────────────────────────
     btnVerTabla.addEventListener('click', () => { renderTabla(); mostrar(seccionTabla); });
     btnNuevoLote.addEventListener('click', () => {
       tickets = []; inputFotos.value = '';
       bulkChofer.value = ''; bulkUnidad.value = '';
+      filtroActual = 'todos';
+      document.querySelectorAll('.btn-filtro').forEach(b => b.classList.toggle('activo', b.dataset.filtro === 'todos'));
       mostrar(seccionDrop);
     });
+
+    // ── Inicio: verificar sesión ──────────────────────────────────
+    if (adminNombre) {
+      mostrarApp();
+    }
+    // Si no hay sesión, pantallaLogin es visible por defecto (sin oculto class)
 
   </script>
 </body>
