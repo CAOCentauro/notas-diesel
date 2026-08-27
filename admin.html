@@ -222,6 +222,7 @@
     .td-inp:disabled, .td-sel:disabled { opacity: 0.5; cursor: not-allowed; }
     .td-num   { text-align: right; width: 76px; }
     .td-fecha { width: 130px; }
+    .td-hora  { width: 80px; }
     .td-chofer { min-width: 128px; }
     .td-unidad { min-width: 138px; }
 
@@ -429,6 +430,7 @@
                 <th>Chofer</th>
                 <th>Unidad</th>
                 <th>Fecha ticket</th>
+                <th>Hora ticket</th>
                 <th>Litros</th>
                 <th>Monto ($)</th>
                 <th>$/L</th>
@@ -479,7 +481,7 @@
   <div class="overlay" id="overlayEnviando">
     <div class="overlay-card">
       <div class="progreso__spinner" style="margin: 0 auto 16px;"></div>
-<div class="overlay-card__titulo">Enviando registros</div>
+      <div class="overlay-card__titulo">Enviando registros</div>
       <div class="overlay-card__sub" id="textoEnviando">Enviando 1 de 5…</div>
       <div class="barra-bg">
         <div class="barra-fill" id="barraEnviando" style="width:0%"></div>
@@ -592,6 +594,7 @@
               chofer:       '',
               unidad:       '',
               fecha_ticket: datos.fecha_ticket    || '',
+              hora_ticket:  datos.hora_ticket     || '',
               litros:       datos.litros          != null ? String(datos.litros)       : '',
               monto:        datos.monto_total     != null ? String(datos.monto_total)  : '',
               precio_litro: datos.precio_litro    != null ? String(datos.precio_litro) : '',
@@ -604,7 +607,7 @@
         } catch {
           tickets.push({
             id: ++idCounter, nombre: imgs[i].name, foto: null,
-            datos: { chofer:'', unidad:'', fecha_ticket:'', litros:'', monto:'', precio_litro:'', gasolinera:'', descripcion:'', confianza: null },
+            datos: { chofer:'', unidad:'', fecha_ticket:'', hora_ticket:'', litros:'', monto:'', precio_litro:'', gasolinera:'', descripcion:'', confianza: null },
             estado: 'pendiente'
           });
         }
@@ -616,9 +619,6 @@
     }
 
     // ── Renderizar tabla ─────────────────────────────────────────
-    // NOTA: los event listeners de edición se registran en tablaBody
-    // mediante delegación (ver abajo), NO dentro de esta función.
-    // Esto evita el bug donde re-renderizar la tabla borraba los listeners.
     function renderTabla() {
       const pendientes = tickets.filter(t => t.estado === 'pendiente').length;
       contador.textContent = `${tickets.length} foto${tickets.length !== 1 ? 's' : ''} · ${pendientes} por enviar`;
@@ -639,8 +639,6 @@
           badgeClass = d.confianza >= 80 ? 'badge-alta' : d.confianza >= 50 ? 'badge-media' : 'badge-baja';
         }
 
-        // CAMBIO 1: type="date" en fecha (antes era type="text")
-        // CAMBIO 2: min="0" en los tres campos numéricos
         return `<tr class="${filaClass}" data-id="${t.id}">
           <td>${t.foto ? `<img class="thumb" src="${t.foto}" alt="ticket" data-thumb="${t.id}"/>` : '🚫'}</td>
           <td style="color:var(--texto-suave);font-weight:600">${estadoIcon || (idx + 1)}</td>
@@ -655,6 +653,7 @@
             </select>
           </td>
           <td><input class="td-inp td-fecha" type="date" value="${d.fecha_ticket}" data-id="${t.id}" data-field="fecha_ticket" ${dis}/></td>
+          <td><input class="td-inp td-hora" type="time" value="${d.hora_ticket}" data-id="${t.id}" data-field="hora_ticket" ${dis}/></td>
           <td><input class="td-inp td-num" type="number" value="${d.litros}" data-id="${t.id}" data-field="litros" placeholder="0.0" step="0.001" min="0" ${dis}/></td>
           <td><input class="td-inp td-num" type="number" value="${d.monto}" data-id="${t.id}" data-field="monto" placeholder="0.00" step="0.01" min="0" ${dis}/></td>
           <td><input class="td-inp td-num" type="number" value="${d.precio_litro}" data-id="${t.id}" data-field="precio_litro" placeholder="0.00" step="0.001" min="0" ${dis}/></td>
@@ -665,7 +664,6 @@
         </tr>`;
       }).join('');
 
-      // Restaurar valores seleccionados en los selects
       tickets.forEach(t => {
         const row = tablaBody.querySelector(`tr[data-id="${t.id}"]`);
         if (!row) return;
@@ -675,7 +673,6 @@
         if (selUnidad) selUnidad.value = t.datos.unidad;
       });
 
-      // Eliminar fila
       tablaBody.querySelectorAll('[data-del]').forEach(btn => {
         btn.addEventListener('click', e => {
           const id = parseInt(e.target.dataset.del);
@@ -684,7 +681,6 @@
         });
       });
 
-      // Ampliar foto
       tablaBody.querySelectorAll('[data-thumb]').forEach(img => {
         img.addEventListener('click', e => {
           const t = tickets.find(t => t.id == e.target.dataset.thumb);
@@ -693,10 +689,6 @@
       });
     }
 
-    // ── CAMBIO 3: Event delegation para edición ──────────────────
-    // Se registra UNA SOLA VEZ en tablaBody, que nunca se reemplaza.
-    // Así captura cambios aunque la tabla se re-renderice (Aplicar, etc.)
-    // Esto corrige el bug donde los datos editados manualmente no llegaban al Sheets.
     tablaBody.addEventListener('input', function(e) {
       if (!e.target.dataset.field) return;
       const t = tickets.find(t => t.id == e.target.dataset.id);
@@ -708,7 +700,6 @@
       if (t) t.datos[e.target.dataset.field] = e.target.value;
     });
 
-    // ── Aplicar a todos ──────────────────────────────────────────
     btnAplicar.addEventListener('click', () => {
       const chofer = bulkChofer.value;
       const unidad = bulkUnidad.value;
@@ -721,8 +712,16 @@
       renderTabla();
     });
 
-    // ── Enviar todos ─────────────────────────────────────────────
     btnEnviarTodo.addEventListener('click', async () => {
+
+      // Leer valores actuales directo del DOM antes de enviar
+      tickets.filter(t => t.estado === 'pendiente').forEach(t => {
+        const row = tablaBody.querySelector(`tr[data-id="${t.id}"]`);
+        if (!row) return;
+        row.querySelectorAll('[data-field]').forEach(el => {
+          t.datos[el.dataset.field] = el.value;
+        });
+      });
 
       const pendientes = tickets.filter(t => t.estado === 'pendiente');
       const sinChofer  = pendientes.filter(t => !t.datos.chofer);
@@ -760,6 +759,7 @@
                 precio_litro: t.datos.precio_litro !== '' ? parseFloat(t.datos.precio_litro) : null,
                 gasolinera:   t.datos.gasolinera   || null,
                 fecha_ticket: t.datos.fecha_ticket || null,
+                hora_ticket:  t.datos.hora_ticket  || null,
                 confianza:    t.datos.confianza
               }
             })
@@ -786,12 +786,10 @@
       mostrar(seccionResumen);
     });
 
-    // ── Agregar más fotos ────────────────────────────────────────
     inputAgregar.addEventListener('change', async e => {
       if (e.target.files.length) { await procesarArchivos(e.target.files); e.target.value = ''; }
     });
 
-    // ── Drop zone ────────────────────────────────────────────────
     inputFotos.addEventListener('change', async e => {
       if (e.target.files.length) await procesarArchivos(e.target.files);
     });
@@ -802,11 +800,9 @@
       if (e.dataTransfer.files.length) await procesarArchivos(e.dataTransfer.files);
     });
 
-    // ── Modal ────────────────────────────────────────────────────
     btnCerrarModal.addEventListener('click', () => modalFoto.classList.remove('activo'));
     modalFoto.addEventListener('click', e => { if (e.target === modalFoto) modalFoto.classList.remove('activo'); });
 
-    // ── Resumen → botones ────────────────────────────────────────
     btnVerTabla.addEventListener('click', () => { renderTabla(); mostrar(seccionTabla); });
     btnNuevoLote.addEventListener('click', () => {
       tickets = []; inputFotos.value = '';
