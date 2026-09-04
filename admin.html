@@ -316,6 +316,11 @@
     </div>
   </header>
 
+
+  <div id="bannerConexion" style="display:none;background:#FEF9C3;border-bottom:1.5px solid #F59E0B;padding:9px 20px;font-size:0.8rem;color:#92400E;text-align:center;">
+    ⚠️ Sin conexión al servidor — usando lista de respaldo. Los datos podrían no estar actualizados.
+  </div>
+
   <main>
 
     <!-- ① Drop zone -->
@@ -363,8 +368,7 @@
           <option value="">— Unidad —</option>
           <option value="KT5793A — VOLVO">KT5793A — VOLVO</option>
           <option value="LB89559 — KENWORTH NARANJA">LB89559 — KENWORTH NARANJA</option>
-          <option value="LC99020 — KENWORTH BLANCO">LC99020 — KENWORTH BLANCO</option>
-          <option value="LB37970 — STERLING">LB37970 — STERLING</option>
+          <option value="VT08F — KENWORTH BLANCO">VT08F — KENWORTH BLANCO</option>
         </select>
         <button class="btn-aplicar" id="btnAplicar">Aplicar</button>
         <span class="bulk-spacer"></span>
@@ -469,12 +473,12 @@
   <script>
 
     // ── Configuración ────────────────────────────────────────────
-    const BACKEND_URL   = 'https://script.google.com/macros/s/AKfycbzjMRXk9isshJ05TyGShojZHpXAiub8aotRQItlfhNM5oEvu7hb5125C08Hva307UCOhQ/exec';
+    const BACKEND_URL   = 'https://script.google.com/macros/s/AKfycbx4uinZ6iTffzkGWEu6XPHusxbuoy3Gr3QB8hM4r4liZ74j8S-9Exf6wN-44fo3NOkEuA/exec';
     const IMG_ANCHO_MAX = 1280;
     const IMG_CALIDAD   = 0.78;
 
-    const CHOFERES = ['Juan Sandoval','Noe Granados','Jose Gabribel','Juan Alvaro (el pollito)'];
-    const UNIDADES = ['KT5793A — VOLVO','LB89559 — KENWORTH NARANJA','LC99020 — KENWORTH BLANCO','LB37970 — STERLING'];
+    let CHOFERES = ['Juan Sandoval','Noe Granados','Jose Gabribel','Juan Alvaro (el pollito)'];
+    let UNIDADES = ['KT5793A — VOLVO','LB89559 — KENWORTH NARANJA','VT08F — KENWORTH BLANCO'];
 
     // Reglas de pre-evaluación (ajusta estos valores según tu operación)
     const ALERTAS = {
@@ -533,9 +537,48 @@
     const btnVerTabla     = document.getElementById('btnVerTabla');
 
     // ── Login ────────────────────────────────────────────────────
+    // Catálogos de respaldo (si el servidor no responde)
+    const FALLBACK_CHOFERES = ['Juan Sandoval','Noe Granados','Jose Gabribel','Juan Alvaro (el pollito)'];
+    const FALLBACK_UNIDADES_OBJ = [
+      {valor:'KT5793A — VOLVO'},
+      {valor:'LB89559 — KENWORTH NARANJA'},
+      {valor:'LC99020 — KENWORTH BLANCO'},
+      {valor:'LB37970 — STERLING'}
+    ];
+
+    function poblarSelectsCatalogo() {
+      // Bulk-bar
+      bulkChofer.innerHTML = '<option value="">— Chofer —</option>' +
+        CHOFERES.map(c => `<option value="${c}">${c}</option>`).join('');
+      bulkUnidad.innerHTML = '<option value="">— Unidad —</option>' +
+        UNIDADES.map(u => `<option value="${u}">${u}</option>`).join('');
+    }
+
+    async function cargarCatalogos() {
+      try {
+        const resp = await fetch(BACKEND_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+          body: JSON.stringify({ accion: 'catalogos' })
+        });
+        const result = await resp.json();
+        if (result.exito) {
+          if (result.choferes && result.choferes.length) CHOFERES = result.choferes;
+          if (result.unidades && result.unidades.length) UNIDADES = result.unidades.map(u => u.valor);
+          poblarSelectsCatalogo();
+          return true;
+        }
+      } catch (_) {}
+      // Conexión fallida
+      document.getElementById('bannerConexion').style.display = 'block';
+      poblarSelectsCatalogo();
+      return false;
+    }
+
     function mostrarApp() {
       pantallaLogin.style.display = 'none';
       adminNombreHdr.textContent = adminNombre;
+      cargarCatalogos();
     }
 
     async function intentarLogin() {
@@ -894,10 +937,13 @@
       const sinChofer  = pendientes.filter(t => !t.datos.chofer);
       const sinUnidad  = pendientes.filter(t => !t.datos.unidad);
 
-      if (sinChofer.length || sinUnidad.length) {
+      const sinFecha = pendientes.filter(t => !t.datos.fecha_ticket);
+
+      if (sinChofer.length || sinUnidad.length || sinFecha.length) {
         const msg = [];
         if (sinChofer.length) msg.push(`• ${sinChofer.length} fila(s) sin chofer`);
         if (sinUnidad.length) msg.push(`• ${sinUnidad.length} fila(s) sin unidad`);
+        if (sinFecha.length)  msg.push(`• ${sinFecha.length} fila(s) sin fecha de ticket (el admin debe completarla)`);
         alert('⚠️ Faltan datos:\n' + msg.join('\n'));
         return;
       }
